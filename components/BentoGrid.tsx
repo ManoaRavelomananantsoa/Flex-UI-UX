@@ -1,60 +1,302 @@
-import { Mail, Github, Globe, Zap, Shield, Cpu } from "lucide-react";
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import { Database, Layout, Server, Code2, Sparkles, ArrowRight } from "lucide-react";
 
 const items = [
   {
-    title: "Performance Next.js",
-    description: "Optimisation du rendu et temps de chargement éclair.",
-    icon: <Zap className="h-4 w-4 text-yellow-400" />,
-    className: "md:col-span-2",
-    bg: "bg-zinc-900/50",
+    title: "Expertise Frontend",
+    description: "Interfaces réactives avec Angular (RxJS/Signals) et Next.js.",
+    backDescription: "Angular, Next.js, TypeScript, TailwindCSS",
+    icon: <Layout size={24} color="#22d3ee" />,
+    spanTwo: true,
+    color: "#083344",
   },
   {
-    title: "Sécurité",
-    description: "Auth sécurisée et gestion des données.",
-    icon: <Shield className="h-4 w-4 text-blue-400" />,
-    className: "md:col-span-1",
-    bg: "bg-zinc-900/50",
+    title: "Full-Stack",
+    description: "Architectures MEAN & PEAN robustes.",
+    backDescription: "Node.js, Express, MongoDB, PostgreSQL",
+    icon: <Server size={24} color="#34d399" />,
+    spanTwo: false,
+    color: "#064e3b",
   },
   {
-    title: "Architecture",
-    description: "Code propre et scalable.",
-    icon: <Cpu className="h-4 w-4 text-emerald-400" />,
-    className: "md:col-span-1",
-    bg: "bg-zinc-900/50",
+    title: "Data Master",
+    description: "SQL & NoSQL (Postgres / Mongo).",
+    backDescription: "MongoDB, PostgreSQL, Prisma, Redis",
+    icon: <Database size={24} color="#fb923c" />,
+    spanTwo: false,
+    color: "#7c2d12",
   },
   {
-    title: "Projets Open Source",
-    description: "Mes contributions majeures sur GitHub.",
-    icon: <Github className="h-4 w-4 text-zinc-300" />,
-    className: "md:col-span-2",
-    bg: "bg-zinc-900/50",
+    title: "Clean Code",
+    description: "SOLID & Design Patterns pour la scalabilité.",
+    backDescription: "SOLID, Clean Architecture, Repository Pattern",
+    icon: <Code2 size={24} color="#a78bfa" />,
+    spanTwo: true,
+    color: "#4c1d95",
   },
 ];
 
+const css = `
+  .bento-section {
+    padding: 6rem 1rem;
+    background: #000;
+    color: #fff;
+  }
+  .bento-container {
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+  .bento-header {
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .bento-header-text {
+    color: #71717a;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 20rem;
+    gap: 1.5rem;
+  }
+  .bento-span-two {
+    grid-column: span 2;
+  }
+
+  /* ── Couche 1 : animation scroll (opacity + translateY UNIQUEMENT) ── */
+  /* Pas de transform-style ici pour ne pas interférer avec le 3D en dessous */
+  .bento-scroll-layer {
+    height: 100%;
+    opacity: 0;
+    translate: 0 48px;
+    transition:
+      opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+      translate 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .bento-scroll-layer.in-view {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  /* ── Couche 2 : perspective wrapper ── */
+  .bento-perspective {
+    perspective: 1200px;
+    height: 100%;
+  }
+
+  /* ── Couche 3 : flip container ── */
+  .bento-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .bento-inner.is-flipped {
+    transform: rotateY(180deg);
+  }
+
+  /* ── Faces ── */
+  .bento-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 2.5rem;
+    padding: 2rem;
+  }
+  .bento-front {
+    background: #09090b;
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .bento-back {
+    transform: rotateY(180deg);
+    border: 1px solid rgba(255,255,255,0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* ── Contenu face avant ── */
+  .bento-icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    background: #18181b;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .bento-card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+  }
+  .bento-card-desc {
+    color: #a1a1aa;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+  .bento-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #52525b;
+  }
+
+  /* ── Contenu face arrière ── */
+  .bento-back-title {
+    font-weight: 700;
+    font-size: 1rem;
+    margin: 0 0 1.5rem;
+  }
+  .bento-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .bento-tag {
+    padding: 0.25rem 0.75rem;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 999px;
+    font-size: 0.625rem;
+    color: #d4d4d8;
+  }
+
+  @media (max-width: 768px) {
+    .bento-grid {
+      grid-template-columns: 1fr;
+      grid-auto-rows: 280px;
+    }
+    .bento-span-two {
+      grid-column: span 1;
+    }
+  }
+`;
+
 export function BentoGrid() {
+  const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
+  const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
+  const scrollRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+
+    scrollRefs.current.forEach((ref, i) => {
+      if (!ref) return;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              setVisibleCards((prev) => new Set(prev).add(i));
+            }, i * 120);
+            observer.disconnect();
+          }
+        },
+        { threshold: 0.15 }
+      );
+      observer.observe(ref);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
+  const toggleCard = (i: number) => {
+    setFlippedCards((prev) => {
+      const next = new Set(prev);
+      next.has(i) ? next.delete(i) : next.add(i);
+      return next;
+    });
+  };
+
   return (
-    <div className="grid md:auto-rows-[18rem] grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto p-4">
-      {items.map((item, i) => (
-        <div
-          key={i}
-          className={`group relative overflow-hidden rounded-3xl border border-zinc-800 p-6 flex flex-col justify-between transition-all hover:border-zinc-500 hover:shadow-2xl hover:shadow-white/5 ${item.className} ${item.bg}`}
-        >
-          {/* Effet de lueur en fond au hover */}
-          <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          
-          <div className="relative z-10">
-            <div className="mb-4 rounded-lg bg-zinc-800 w-fit p-2 group-hover:scale-110 transition-transform">
-              {item.icon}
-            </div>
-            <h3 className="text-xl font-bold text-zinc-100 mb-2">{item.title}</h3>
-            <p className="text-zinc-400 text-sm leading-relaxed">{item.description}</p>
+    <>
+      <style>{css}</style>
+
+      <section className="bento-section">
+        <div className="bento-container">
+
+          <div className="bento-header">
+            <Sparkles size={18} color="#22d3ee" />
+            <h2 className="bento-header-text">Mes compétences</h2>
           </div>
-          
-          <div className="relative z-10 mt-4 flex items-center text-xs font-medium text-zinc-500 group-hover:text-white transition-colors">
-            En savoir plus →
+
+          <div className="bento-grid">
+            {items.map((item, i) => (
+              <div
+                key={i}
+                className={item.spanTwo ? "bento-span-two" : ""}
+              >
+                {/* Couche 1 — scroll animation (opacity + translate) */}
+                <div
+                  ref={(el) => { scrollRefs.current[i] = el; }}
+                  className={`bento-scroll-layer${visibleCards.has(i) ? " in-view" : ""}`}
+                >
+                  {/* Couche 2 — perspective */}
+                  <div className="bento-perspective">
+
+                    {/* Couche 3 — flip */}
+                    <div
+                      onClick={() => toggleCard(i)}
+                      className={`bento-inner${flippedCards.has(i) ? " is-flipped" : ""}`}
+                    >
+                      {/* FACE AVANT */}
+                      <div className="bento-face bento-front">
+                        <div>
+                          <div className="bento-icon-box">{item.icon}</div>
+                          <h3 className="bento-card-title">{item.title}</h3>
+                          <p className="bento-card-desc">{item.description}</p>
+                        </div>
+                        <div className="bento-hint">
+                          Détails <ArrowRight size={12} />
+                        </div>
+                      </div>
+
+                      {/* FACE ARRIÈRE */}
+                      <div
+                        className="bento-face bento-back"
+                        style={{ backgroundColor: item.color }}
+                      >
+                        <h3 className="bento-back-title">Stack Technique</h3>
+                        <div className="bento-tags">
+                          {item.backDescription.split(", ").map((tech, idx) => (
+                            <span key={idx} className="bento-tag">{tech}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
+
         </div>
-      ))}
-    </div>
+      </section>
+    </>
   );
 }

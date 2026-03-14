@@ -7,7 +7,7 @@ export function Navbar() {
         
         {/* Logo Style "Hykrox" */}
         <div className="flex flex-col leading-none">
-          <span className="text-xl font-black tracking-tighter text-cyan-400">FLEX</span>
+          <span className="text-xl font-black tracking-tighter text-cyan-400">PORTFOLIO</span>
           <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Unique Designs</span>
         </div>
 
@@ -31,7 +31,7 @@ export function Navbar() {
           </button>
           
           {/* Un petit bouton "Call to Action" discret */}
-          <div className="h-8 w-[1px] bg-zinc-800 mx-2 hidden sm:block" />
+          <div className="h-8 w-px bg-zinc-800 mx-2 hidden sm:block" />
           <button className="hidden sm:block text-[10px] uppercase tracking-widest font-bold border border-cyan-500/50 px-4 py-2 rounded-sm hover:bg-cyan-500 hover:text-black transition-all">
             Hire Me
           </button>
