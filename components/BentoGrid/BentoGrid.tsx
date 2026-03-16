@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { Database, Layout, Server, Code2, Sparkles, ArrowRight } from "lucide-react";
+import "./BentoGrid.css";
 
 const items = [
   {
