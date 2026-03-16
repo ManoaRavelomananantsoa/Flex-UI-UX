@@ -116,7 +116,7 @@ const css = `
   }
 
   .bento-inner.is-flipped {
-    transform: rotateY(180deg);
+    transform: rotateY(180deg)
   }
 
   .bento-face {
