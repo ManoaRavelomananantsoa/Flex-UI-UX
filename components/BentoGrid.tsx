@@ -38,21 +38,34 @@ const items = [
 ];
 
 const css = `
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  @keyframes orbit {
+    to { --angle: 360deg; }
+  }
+
   .bento-section {
     padding: 6rem 1rem;
     background: #000;
     color: #fff;
   }
+
   .bento-container {
     max-width: 64rem;
     margin: 0 auto;
   }
+
   .bento-header {
     margin-bottom: 3rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
+
   .bento-header-text {
     color: #71717a;
     text-transform: uppercase;
@@ -61,18 +74,18 @@ const css = `
     font-weight: 700;
     margin: 0;
   }
+
   .bento-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: 20rem;
     gap: 1.5rem;
   }
+
   .bento-span-two {
     grid-column: span 2;
   }
 
-  /* ── Couche 1 : animation scroll (opacity + translateY UNIQUEMENT) ── */
-  /* Pas de transform-style ici pour ne pas interférer avec le 3D en dessous */
   .bento-scroll-layer {
     height: 100%;
     opacity: 0;
@@ -81,18 +94,17 @@ const css = `
       opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
       translate 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
   .bento-scroll-layer.in-view {
     opacity: 1;
     translate: 0 0;
   }
 
-  /* ── Couche 2 : perspective wrapper ── */
   .bento-perspective {
     perspective: 1200px;
     height: 100%;
   }
 
-  /* ── Couche 3 : flip container ── */
   .bento-inner {
     position: relative;
     width: 100%;
@@ -101,11 +113,11 @@ const css = `
     transform-style: preserve-3d;
     transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
   .bento-inner.is-flipped {
     transform: rotateY(180deg);
   }
 
-  /* ── Faces ── */
   .bento-face {
     position: absolute;
     inset: 0;
@@ -114,16 +126,179 @@ const css = `
     border-radius: 2.5rem;
     padding: 2rem;
   }
+
+  /* ── Face avant ── */
   .bento-front {
     background: #09090b;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(0, 207, 255, 0.12);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
+    overflow: visible;
   }
+
+  /* Arc neon #1 */
+  .bento-front::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: calc(2.5rem + 1px);
+    background: conic-gradient(
+      from var(--angle),
+      transparent 0deg,
+      transparent 55deg,
+      #0099cc 70deg,
+      #00cfff 88deg,
+      #60f8ff 100deg,
+      #00cfff 112deg,
+      #0099cc 130deg,
+      transparent 150deg,
+      transparent 360deg
+    );
+    animation: orbit 6s linear infinite;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Glow #1 */
+  .bento-front::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: calc(2.5rem + 4px);
+    background: conic-gradient(
+      from var(--angle),
+      transparent 0deg,
+      transparent 50deg,
+      rgba(0, 180, 255, 0.08) 75deg,
+      rgba(0, 230, 255, 0.28) 100deg,
+      rgba(100, 248, 255, 0.08) 125deg,
+      transparent 150deg,
+      transparent 360deg
+    );
+    animation: orbit 6s linear infinite;
+    filter: blur(6px);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* Arc neon #2 — opposé à 180deg */
+  .bento-neon2 {
+    position: absolute;
+    inset: -1px;
+    border-radius: calc(2.5rem + 1px);
+    background: conic-gradient(
+      from calc(var(--angle) + 180deg),
+      transparent 0deg,
+      transparent 55deg,
+      #0099cc 70deg,
+      #00cfff 88deg,
+      #60f8ff 100deg,
+      #00cfff 112deg,
+      #0099cc 130deg,
+      transparent 150deg,
+      transparent 360deg
+    );
+    animation: orbit 6s linear infinite;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Glow #2 */
+  .bento-neon2-glow {
+    position: absolute;
+    inset: -4px;
+    border-radius: calc(2.5rem + 4px);
+    background: conic-gradient(
+      from calc(var(--angle) + 180deg),
+      transparent 0deg,
+      transparent 50deg,
+      rgba(0, 180, 255, 0.08) 75deg,
+      rgba(0, 230, 255, 0.28) 100deg,
+      rgba(100, 248, 255, 0.08) 125deg,
+      transparent 150deg,
+      transparent 360deg
+    );
+    animation: orbit 6s linear infinite;
+    filter: blur(6px);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* Masque qui cache le conic derrière le fond de la carte */
+  .bento-front-mask {
+    position: absolute;
+    inset: 0.5px;
+    border-radius: calc(2.5rem - 0.5px);
+    background: #09090b;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Tout le contenu passe au-dessus du masque */
+  .bento-front > *:not(.bento-front-mask):not(.bento-neon2):not(.bento-neon2-glow) {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Hover : intensité uniquement (pas de changement de vitesse) */
+  .bento-inner:hover .bento-front::before {
+    background: conic-gradient(
+      from var(--angle),
+      transparent 0deg,
+      transparent 45deg,
+      #0077bb 60deg,
+      #00cfff 80deg,
+      #ffffff 100deg,
+      #00cfff 120deg,
+      #0077bb 140deg,
+      transparent 165deg,
+      transparent 360deg
+    );
+  }
+
+  .bento-inner:hover .bento-front::after {
+    filter: blur(8px);
+    background: conic-gradient(
+      from var(--angle),
+      transparent 0deg,
+      transparent 50deg,
+      rgba(0, 180, 255, 0.12) 75deg,
+      rgba(0, 230, 255, 0.45) 100deg,
+      rgba(100, 248, 255, 0.12) 125deg,
+      transparent 150deg,
+      transparent 360deg
+    );
+  }
+
+  .bento-inner:hover .bento-neon2 {
+    background: conic-gradient(
+      from calc(var(--angle) + 180deg),
+      transparent 0deg,
+      transparent 45deg,
+      #0077bb 60deg,
+      #00cfff 80deg,
+      #ffffff 100deg,
+      #00cfff 120deg,
+      #0077bb 140deg,
+      transparent 165deg,
+      transparent 360deg
+    );
+  }
+
+  .bento-inner:hover .bento-neon2-glow {
+    filter: blur(8px);
+  }
+
+  .bento-inner:hover .bento-hint {
+    color: rgba(0, 207, 255, 0.5);
+  }
+
+  /* ── Face arrière ── */
   .bento-back {
     transform: rotateY(180deg);
-    border: 1px solid rgba(255,255,255,0.15);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -131,7 +306,7 @@ const css = `
     text-align: center;
   }
 
-  /* ── Contenu face avant ── */
+  /* ── Icône ── */
   .bento-icon-box {
     display: flex;
     align-items: center;
@@ -139,20 +314,23 @@ const css = `
     width: 3.5rem;
     height: 3.5rem;
     background: #18181b;
-    border: 1px solid rgba(255,255,255,0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 1rem;
     margin-bottom: 1.5rem;
   }
+
   .bento-card-title {
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0 0 0.75rem;
   }
+
   .bento-card-desc {
     color: #a1a1aa;
     font-size: 0.875rem;
     margin: 0;
   }
+
   .bento-hint {
     display: flex;
     align-items: center;
@@ -161,25 +339,27 @@ const css = `
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #52525b;
+    color: #3f3f46;
+    transition: color 0.2s;
   }
 
-  /* ── Contenu face arrière ── */
   .bento-back-title {
     font-weight: 700;
     font-size: 1rem;
     margin: 0 0 1.5rem;
   }
+
   .bento-tags {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem;
   }
+
   .bento-tag {
     padding: 0.25rem 0.75rem;
-    background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 999px;
     font-size: 0.625rem;
     color: #d4d4d8;
@@ -264,7 +444,11 @@ export function BentoGrid() {
                       className={`bento-inner${flippedCards.has(i) ? " is-flipped" : ""}`}
                     >
                       {/* FACE AVANT */}
+                      {/* FACE AVANT */}
                       <div className="bento-face bento-front">
+                        <div className="bento-front-mask" />
+                        <div className="bento-neon2" />
+                        <div className="bento-neon2-glow" />
                         <div>
                           <div className="bento-icon-box">{item.icon}</div>
                           <h3 className="bento-card-title">{item.title}</h3>
