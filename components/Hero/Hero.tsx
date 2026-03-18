@@ -5,7 +5,13 @@ import { Code2, Database, Cpu } from "lucide-react";
 export function Hero() {
   return (
     <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-24 py-20 min-h-[80vh]">
-      <div className="flex-1 space-y-6 z-10">
+      
+      {/* Texte à gauche avec lueur noire en fond */}
+      <div className="flex-1 space-y-6 z-10 relative">
+        
+        {/* Lueur noire dégradée derrière le texte pour la lisibilité */}
+        <div className="absolute -inset-20 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.8)_0%,transparent_70%)] pointer-events-none -z-10" />
+
         <div className="flex flex-col gap-1">
           <span className="text-cyan-400 font-bold tracking-widest text-sm uppercase">
             Full-Stack Developer
@@ -15,9 +21,9 @@ export function Hero() {
           </span>
         </div>
 
-        <h1 className="text-6xl md:text-8xl font-black leading-none tracking-tighter uppercase">
+        <h1 className="text-6xl md:text-8xl font-black leading-none tracking-tighter uppercase relative">
           FULL <br /> 
-          <span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-600">
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-600 drop-shadow-[0_0_15px_rgba(6,182,212,0.3)]">
             STACK
           </span> <br />
           ENGINEER
@@ -37,13 +43,10 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Image à droite avec les ANNEAUX NÉONS */}
+      {/* Image à droite (Le reste du code reste identique) */}
       <div className="relative flex items-center justify-center flex-1">
-        
-        {/* Cercles d'orbite en arrière-plan */}
+        {/* ... tes anneaux et ton portrait ... */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          
-          {/* Anneau 1 - Grand Néon */}
           <motion.div 
             animate={{ rotate: 360 }}
             transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
@@ -54,7 +57,6 @@ export function Hero() {
              </div>
           </motion.div>
 
-          {/* Anneau 2 - Moyen Néon */}
           <motion.div 
             animate={{ rotate: -360 }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -65,7 +67,6 @@ export function Hero() {
              </div>
           </motion.div>
 
-          {/* Anneau 3 - Petit Néon Intense */}
           <motion.div 
             animate={{ rotate: 360 }}
             transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
@@ -77,21 +78,18 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* Halo lumineux central plus intense */}
         <div className="absolute w-72 h-72 bg-cyan-600/20 rounded-full blur-[120px] animate-pulse"></div>
 
-        {/* Le portrait */}
         <div className="relative group z-10 flex flex-col items-center">
           <div className="absolute -inset-1.5 bg-cyan-500 rounded-full blur opacity-30 group-hover:opacity-60 transition duration-1000 shadow-[0_0_30px_rgba(6,182,212,0.5)]"></div>
           <div className="relative w-72 h-72 md:w-80 md:h-80 bg-zinc-900 rounded-full overflow-hidden border-2 border-cyan-500/30 shadow-2xl">
             <img 
-              src="/images/toji.jpg" 
+              src="/images/blackhole.png" 
               alt="Portrait" 
               className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
             />
           </div>
           
-          {/* Badge de notification style néon */}
           <div className="absolute -top-2 -right-2 bg-zinc-950/80 backdrop-blur-md text-white px-4 py-2 rounded-2xl shadow-[0_0_20px_rgba(6,182,212,0.3)] border border-cyan-500/50">
             <div className="flex items-center gap-2">
               <span className="relative flex h-2 w-2">
