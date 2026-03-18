@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/Navbar";
-import { Hero } from "@/components/Hero";
+import { Hero } from "@/components/Hero/Hero";
 import { BentoGrid } from "@/components/BentoGrid/BentoGrid";
 
 export default function Home() {
