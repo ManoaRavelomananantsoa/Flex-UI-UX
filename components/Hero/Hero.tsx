@@ -10,7 +10,7 @@ export function Hero() {
       <div className="flex-1 space-y-6 z-10 relative">
         
         {/* Lueur noire dégradée derrière le texte pour la lisibilité */}
-        <div className="absolute -inset-20 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.8)_0%,transparent_70%)] pointer-events-none -z-10" />
+        <div className="absolute -inset-20 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.9)_0%,transparent_70%)] pointer-events-none -z-10" />
 
         <div className="flex flex-col gap-1">
           <span className="text-cyan-400 font-bold tracking-widest text-sm uppercase">
@@ -34,9 +34,9 @@ export function Hero() {
           Je transforme des logiques complexes en interfaces fluides et performantes.
         </p>
 
-        <div className="flex flex-wrap gap-4 pt-4">
+        <div className="flex flex-wrap gap-4 pt-4" >
           {["Next.js", "TypeScript", "Clean Architecture"].map((skill) => (
-            <div key={skill} className="px-4 py-2 bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-full text-xs text-zinc-300">
+            <div key={skill} className="px-4 py-2 bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-full text-xs text-zinc-300" style={{boxShadow: "0 0 10px #0099cc "}}>
               {skill}
             </div>
           ))}
@@ -81,10 +81,10 @@ export function Hero() {
         <div className="absolute w-72 h-72 bg-cyan-600/20 rounded-full blur-[120px] animate-pulse"></div>
 
         <div className="relative group z-10 flex flex-col items-center">
-          <div className="absolute -inset-1.5 bg-cyan-500 rounded-full blur opacity-30 group-hover:opacity-60 transition duration-1000 shadow-[0_0_30px_rgba(6,182,212,0.5)]"></div>
+          <div className="absolute -inset-1.5 bg-cyan-500 rounded-full blur opacity-30 group-hover:opacity-70 transition duration-1000 shadow-[0_0_30px_rgba(6,182,212,0.5)]"></div>
           <div className="relative w-72 h-72 md:w-80 md:h-80 bg-zinc-900 rounded-full overflow-hidden border-2 border-cyan-500/30 shadow-2xl">
             <img 
-              src="/images/blackhole.png" 
+              src="/images/me.png" 
               alt="Portrait" 
               className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
             />
