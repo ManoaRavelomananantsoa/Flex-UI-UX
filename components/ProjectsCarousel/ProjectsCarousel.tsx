@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, ExternalLink, Code2, Database, Globe, Smartphone } from "lucide-react";
+import { Github, ExternalLink, Code2, Database, Globe, Smartphone, Radius } from "lucide-react";
 
 const projects = [
   {
@@ -40,6 +40,26 @@ const projects = [
 
 export function ProjectsCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (carouselRef.current) {
+      observer.observe(carouselRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const nextProject = () => {
     setCurrentIndex((prev) => (prev + 1) % projects.length);
@@ -50,10 +70,15 @@ export function ProjectsCarousel() {
   };
 
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-20 relative overflow-hidden" ref={carouselRef}>
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-16">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 48 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 48 }}
+          transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+        >
           <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
             <span className=" bg-clip-text bg-linear-to-r text-white ">
               Mes Projets
@@ -62,10 +87,15 @@ export function ProjectsCarousel() {
           <p className="text-cyan-400 max-w-2xl mx-auto text-lg">
             Découvrez mes réalisations récentes, des applications web aux solutions mobiles
           </p>
-        </div>
+        </motion.div>
 
         {/* Carousel */}
-        <div className="relative max-w-6xl mx-auto">
+        <motion.div 
+          className="relative max-w-6xl mx-auto"
+          initial={{ opacity: 0, y: 48 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 48 }}
+          transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1], delay: 0.2 }}
+        >
           <div className="flex items-center justify-center">
             {/* Boutons de navigation */}
             <button
@@ -97,7 +127,7 @@ export function ProjectsCarousel() {
             </button>
 
             {/* Projet actuel */}
-            <div className="w-full max-w-4xl mx-auto">
+            <div className="w-full max-w-4xl mx-auto" style={{ boxShadow: '0 0 40px rgba(6, 182, 212, 0.8)', borderRadius: '1.5rem' }}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentIndex}
@@ -211,7 +241,7 @@ export function ProjectsCarousel() {
               />
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
