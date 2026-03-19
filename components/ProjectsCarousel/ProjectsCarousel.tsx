@@ -5,36 +5,36 @@ import { Github, ExternalLink, Code2, Database, Globe, Smartphone } from "lucide
 
 const projects = [
   {
-    title: "E-Commerce Platform",
-    description: "Boutique en ligne moderne avec panier interactif et paiement sécurisé",
-    tech: ["Next.js", "TypeScript", "Stripe", "PostgreSQL"],
+    title: "Electro-view",
+    description: "Application de simulation graphique de tension et de l'intensité du courant dans une circuit en fonction du temps .",
+    tech: ["PyQT5","Python","Matplotlib"],
     icon: <Globe className="h-6 w-6" />,
     color: "from-blue-500 to-purple-600",
-    image: "/projects/ecommerce.jpg"
+    image: "images/projects/Electro-view.png"
   },
   {
-    title: "Task Management App",
-    description: "Application de gestion de tâches avec drag & drop et collaboration en temps réel",
-    tech: ["React", "Node.js", "Socket.io", "MongoDB"],
+    title: "Gestion de carrière",
+    description: "Application de gestion de carrière avec classification des candidatures et suivi des processus",
+    tech: [ "PostgreSQL","Express","Angular", "Node.js"],
     icon: <Code2 className="h-6 w-6" />,
     color: "from-green-500 to-teal-600",
-    image: "/projects/taskapp.jpg"
+    image: "images/projects/gestion-carriere.png"
   },
   {
     title: "Tri-Fako",
     description: "Application mobile , portefeuille pour une distribution decentralisé destiner a encourager les utilisateurs a jetter leur déchets dans les points de collecte",
     tech: ["Angular", "D3.js", "Python", "PostgreSQL"],
     icon: <Database className="h-6 w-6" />,
-    color: "from-orange-500 to-red-600",
-    image: "/projects/dashboard.jpg"
+    color: "transparent",
+    image: "images/projects/logo-trifako.png"
   },
   {
-    title: "Mobile Banking App",
-    description: "Application bancaire mobile avec authentification biométrique et notifications push",
+    title: "Color detector ",
+    description: "Application qui détecte la couleur d'un objet",
     tech: ["React Native", "TypeScript", "Firebase", "REST API"],
     icon: <Smartphone className="h-6 w-6" />,
     color: "from-cyan-500 to-blue-600",
-    image: "/projects/mobile.jpg"
+    image: "images/projects/color-detector.png"
   }
 ];
 
@@ -55,11 +55,11 @@ export function ProjectsCarousel() {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-purple-600">
+            <span className=" bg-clip-text bg-linear-to-r text-white ">
               Mes Projets
             </span>
           </h2>
-          <p className="text-zinc-400 max-w-2xl mx-auto text-lg">
+          <p className="text-cyan-400 max-w-2xl mx-auto text-lg">
             Découvrez mes réalisations récentes, des applications web aux solutions mobiles
           </p>
         </div>
@@ -70,8 +70,13 @@ export function ProjectsCarousel() {
             {/* Boutons de navigation */}
             <button
               onClick={prevProject}
-              className="absolute left-0 z-20 p-3 bg-zinc-900/80 backdrop-blur-sm border border-zinc-700 rounded-full text-white hover:bg-zinc-800 transition-colors"
+              className="absolute left-0 z-20 p-4 bg-zinc-950/90 backdrop-blur-md rounded-full text-cyan-400 hover:bg-zinc-900 hover:text-cyan-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all duration-300 overflow-hidden group"
               aria-label="Projet précédent"
+              style={{
+                background: 'rgba(3, 7, 18, 0.95)',
+                borderImage: 'linear-gradient(135deg, #06b6d4, #ffffff) 1',
+                border: '2px solid'
+              }}
             >
               <motion.svg
                 width="24"
@@ -102,7 +107,7 @@ export function ProjectsCarousel() {
                   transition={{ duration: 0.5, ease: "easeInOut" }}
                   className="relative"
                 >
-                  <div className="bg-zinc-900/90 backdrop-blur-xl rounded-3xl border border-zinc-700/50 overflow-hidden shadow-2xl">
+                  <div className="transparent backdrop-blur-sm rounded-3xl border border-zinc-700/50 overflow-hidden shadow-2xl">
                     {/* Image du projet */}
                     <div className="relative h-64 md:h-80 overflow-hidden">
                       <div className={`absolute inset-0 bg-linear-to-br ${projects[currentIndex].color} opacity-20`}></div>
@@ -117,7 +122,7 @@ export function ProjectsCarousel() {
                     </div>
 
                     {/* Contenu */}
-                    <div className="p-8">
+                    <div className="p-8 bg-black/30">
                       <div className="flex items-center gap-4 mb-6">
                         <div className={`p-3 bg-linear-to-br ${projects[currentIndex].color} rounded-xl text-white`}>
                           {projects[currentIndex].icon}
@@ -164,8 +169,13 @@ export function ProjectsCarousel() {
             {/* Bouton suivant */}
             <button
               onClick={nextProject}
-              className="absolute right-0 z-20 p-3 bg-zinc-900/80 backdrop-blur-sm border border-zinc-700 rounded-full text-white hover:bg-zinc-800 transition-colors"
+              className="absolute right-0 z-20 p-4 bg-zinc-950/90 backdrop-blur-md rounded-full text-cyan-400 hover:bg-zinc-900 hover:text-cyan-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all duration-300 overflow-hidden group"
               aria-label="Projet suivant"
+              style={{
+                background: 'rgba(3, 7, 18, 0.95)',
+                borderImage: 'linear-gradient(135deg, #06b6d4, #ffffff) 1',
+                border: '2px solid'
+              }}
             >
               <motion.svg
                 width="24"
