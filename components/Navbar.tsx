@@ -1,11 +1,17 @@
 "use client";
 import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
+  const pathname = usePathname();
+  const isDesignsPage = pathname === "/designs";
 
   useEffect(() => {
+    if (pathname === "/designs") return;
+
     const handleScroll = () => {
       const sections = ["home", "designs", "services", "about", "contact"];
       const scrollPosition = window.scrollY + 100;
@@ -25,7 +31,7 @@ export function Navbar() {
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [pathname]);
 
   const navItems = [
     { name: "Home", id: "home" },
@@ -47,19 +53,42 @@ export function Navbar() {
 
         {/* Liens de navigation (Cachés sur mobile pour le flex) */}
         <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
-            <a
-              key={item.id}
-              href={`#${item.id}`}
-              className={`text-xs uppercase tracking-widest font-medium transition-colors ${
-                activeSection === item.id 
-                  ? "text-cyan-400" 
-                  : "text-zinc-400 hover:text-cyan-400"
-              }`}
-            >
-              {item.name}
-            </a>
-          ))}
+          {navItems.map((item) => {
+            const isDesigns = item.id === "designs";
+            const isHome = item.id === "home";
+            const href = isHome ? "/" : isDesigns ? "/designs" : `#${item.id}`;
+            const isActive = isDesignsPage 
+              ? pathname === "/designs" && item.id === "designs"
+              : pathname === "/" && item.id === "home"
+              ? true
+              : activeSection === item.id;
+
+            return isHome || isDesigns ? (
+              <Link
+                key={item.id}
+                href={href}
+                className={`text-xs uppercase tracking-widest font-medium transition-colors ${
+                  isActive 
+                    ? "text-cyan-400" 
+                    : "text-zinc-400 hover:text-cyan-400"
+                }`}
+              >
+                {item.name}
+              </Link>
+            ) : (
+              <a
+                key={item.id}
+                href={href}
+                className={`text-xs uppercase tracking-widest font-medium transition-colors ${
+                  isActive 
+                    ? "text-cyan-400" 
+                    : "text-zinc-400 hover:text-cyan-400"
+                }`}
+              >
+                {item.name}
+              </a>
+            );
+          })}
         </div>
 
         {/* Icône de recherche pour le look UI pro */}
