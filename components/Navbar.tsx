@@ -13,7 +13,7 @@ export function Navbar() {
 
         {/* Liens de navigation (Cachés sur mobile pour le flex) */}
         <div className="hidden md:flex items-center gap-8">
-          {["Home", "Designs", "Services", "About Us", "Contact Us"].map((link) => (
+          {["Home", "Designs", "Services", "About Me", "Contact Me"].map((link) => (
             <a
               key={link}
               href={`#${link.toLowerCase().replace(" ", "")}`}
