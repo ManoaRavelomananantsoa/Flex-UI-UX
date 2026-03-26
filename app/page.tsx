@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero/Hero";
 import { BentoGrid } from "@/components/BentoGrid/BentoGrid";
 import { ProjectsCarousel } from "@/components/ProjectsCarousel/ProjectsCarousel";
+import { Footer } from "@/components/Footer";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -40,6 +41,9 @@ export default function Home() {
       <section className="py-12">
         <ProjectsCarousel />
       </section>
+
+      {/* Footer */}
+      <Footer />
     </main>
   );
 }
