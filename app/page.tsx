@@ -3,31 +3,27 @@ import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero/Hero";
 import { BentoGrid } from "@/components/BentoGrid/BentoGrid";
 import { ProjectsCarousel } from "@/components/ProjectsCarousel/ProjectsCarousel";
+<<<<<<< HEAD
 import { Footer } from "@/components/Footer";
 import { useEffect } from "react";
+=======
+import { useScrollBackground } from "@/hooks/useScrollBackground";
+>>>>>>> bc7563a (background onscrollanimation)
 
 export default function Home() {
-  useEffect(() => {
-    // Définir la couleur de background pour cette section
-    document.body.style.backgroundColor = 'rgba(139, 69, 19, 0.9)';
-    
-    return () => {
-      // Nettoyer quand le composant est démonté
-      document.body.style.backgroundColor = '';
-    };
-  }, []);
+  const { activeSection } = useScrollBackground();
 
   return (
     <main className="min-h-screen  text-white selection:bg-cyan-500/30">
       <Navbar />
       
       {/* Section 1: Hero (Salutations + Image) */}
-      <section className="pt-20 pb-16">
+      <section id="section-hero" className="pt-20 pb-16">
         <Hero />
       </section>
 
       {/* Section 2: Services (Ton tableau asymétrique) */}
-      <section className="py-16 bg-black/0">
+      <section id="section-services" className="py-16 bg-black/0">
         <div className="container mx-auto px-4">
           <div className="mb-8">
             <span className="text-cyan-400 font-mono text-sm uppercase tracking-widest">Our Services</span>
@@ -38,7 +34,7 @@ export default function Home() {
       </section>
 
       {/* Section 3: Projets (Carrousel) */}
-      <section className="py-12">
+      <section id="section-projects" className="py-12">
         <ProjectsCarousel />
       </section>
 

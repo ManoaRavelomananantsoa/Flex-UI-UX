@@ -22,6 +22,7 @@
 body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-image 0.6s ease-in-out;
 }
 html, body {
   min-height: 100vh;
