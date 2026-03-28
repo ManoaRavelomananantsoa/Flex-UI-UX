@@ -33,14 +33,63 @@ const sectionBackgrounds: Record<string, SectionBackground> = {
   }
 };
 
-const applyBackground = (section: string) => {
-  const background = sectionBackgrounds[section];
-  if (!background) return;
-  document.body.style.backgroundImage = `url(${background.image})`;
-  document.body.style.backgroundPosition = background.position || 'center center';
-  document.body.style.backgroundSize = background.size || 'cover';
-  document.body.style.backgroundRepeat = background.repeat || 'no-repeat';
-  document.body.style.backgroundAttachment = background.attachment || 'fixed';
+let overlayA: HTMLDivElement | null = null;
+let overlayB: HTMLDivElement | null = null;
+let activeOverlay: 'A' | 'B' = 'A';
+
+const createOverlay = (): HTMLDivElement => {
+  const el = document.createElement('div');
+  el.style.cssText = `
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0;
+    pointer-events: none;
+  `;
+  document.body.appendChild(el);
+  return el;
+};
+
+const getOverlays = (): [HTMLDivElement, HTMLDivElement] => {
+  if (!overlayA) overlayA = createOverlay();
+  if (!overlayB) overlayB = createOverlay();
+  return [overlayA, overlayB];
+};
+
+const applyToOverlay = (section: string, withTransition: boolean) => {
+  const bg = sectionBackgrounds[section];
+  if (!bg) return;
+
+  const [a, b] = getOverlays();
+  const current = activeOverlay === 'A' ? a : b;
+  const next = activeOverlay === 'A' ? b : a;
+
+  // Prépare le prochain overlay (invisible) avec le nouveau background
+  next.style.transition = 'none';
+  next.style.opacity = '0';
+  next.style.backgroundImage = `url(${bg.image})`;
+  next.style.backgroundPosition = bg.position || 'center center';
+  next.style.backgroundSize = bg.size || 'cover';
+  next.style.backgroundAttachment = bg.attachment || 'fixed';
+  next.style.backgroundRepeat = bg.repeat || 'no-repeat';
+
+  // Force reflow
+  next.getBoundingClientRect();
+
+  if (withTransition) {
+    // Fade in le nouveau, fade out l'ancien simultanément
+    next.style.transition = 'opacity 0.8s ease-in-out';
+    current.style.transition = 'opacity 0.8s ease-in-out';
+    next.style.opacity = '1';
+    current.style.opacity = '0';
+  } else {
+    next.style.opacity = '1';
+    current.style.opacity = '0';
+  }
+
+  activeOverlay = activeOverlay === 'A' ? 'B' : 'A';
 };
 
 export const useScrollBackground = () => {
@@ -48,7 +97,10 @@ export const useScrollBackground = () => {
   const activeSectionRef = useRef<string>('hero');
 
   useEffect(() => {
-    applyBackground('hero');
+    document.body.style.backgroundImage = 'none';
+    document.body.style.background = 'none';
+
+    applyToOverlay('hero', false);
 
     const handleScroll = () => {
       const sections = ['hero', 'services', 'projects'];
@@ -62,7 +114,7 @@ export const useScrollBackground = () => {
             if (activeSectionRef.current !== section) {
               activeSectionRef.current = section;
               setActiveSection(section);
-              applyBackground(section);
+              applyToOverlay(section, true);
             }
             break;
           }
@@ -73,7 +125,9 @@ export const useScrollBackground = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   return { activeSection };
