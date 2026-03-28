@@ -3,13 +3,8 @@ import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero/Hero";
 import { BentoGrid } from "@/components/BentoGrid/BentoGrid";
 import { ProjectsCarousel } from "@/components/ProjectsCarousel/ProjectsCarousel";
-<<<<<<< HEAD
 import { Footer } from "@/components/Footer";
-import { useEffect } from "react";
-=======
 import { useScrollBackground } from "@/hooks/useScrollBackground";
->>>>>>> bc7563a (background onscrollanimation)
-
 export default function Home() {
   const { activeSection } = useScrollBackground();
 
