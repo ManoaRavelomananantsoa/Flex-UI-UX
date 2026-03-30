@@ -18,14 +18,14 @@ const sectionBackgrounds: Record<string, SectionBackground> = {
     attachment: 'fixed'
   },
   services: {
-    image: '/images/toji.png',
+    image: '/images/nightsky.png',
     position: 'center center',
     size: 'cover',
     repeat: 'no-repeat',
     attachment: 'fixed'
   },
   projects: {
-    image: '/images/me.png',
+    image: '/images/planet.png',
     position: 'center center',
     size: 'cover',
     repeat: 'no-repeat',
