@@ -7,10 +7,10 @@ import { usePathname } from "next/navigation";
 export function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
   const pathname = usePathname();
-  const isDesignsPage = pathname === "/designs";
+  const isPageRoute = pathname === "/designs" || pathname === "/services";
 
   useEffect(() => {
-    if (pathname === "/designs") return;
+    if (isPageRoute) return;
 
     const handleScroll = () => {
       const sections = ["home", "designs", "services", "about", "contact"];
@@ -56,14 +56,15 @@ export function Navbar() {
           {navItems.map((item) => {
             const isDesigns = item.id === "designs";
             const isHome = item.id === "home";
-            const href = isHome ? "/" : isDesigns ? "/designs" : `#${item.id}`;
-            const isActive = isDesignsPage 
-              ? pathname === "/designs" && item.id === "designs"
+            const isServices = item.id === "services";
+            const href = isHome ? "/" : isDesigns ? "/designs" : isServices ? "/services" : `#${item.id}`;
+            const isActive = isPageRoute 
+              ? pathname === `/${item.id}`
               : pathname === "/" && item.id === "home"
               ? true
               : activeSection === item.id;
 
-            return isHome || isDesigns ? (
+            return isHome || isDesigns || isServices ? (
               <Link
                 key={item.id}
                 href={href}

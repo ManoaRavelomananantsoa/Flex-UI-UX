@@ -43,6 +43,7 @@ const createOverlay = (): HTMLDivElement => {
     position: fixed;
     inset: 0;
     z-index: -1;
+    background-color: #000;
     background-repeat: no-repeat;
     background-attachment: fixed;
     opacity: 0;
