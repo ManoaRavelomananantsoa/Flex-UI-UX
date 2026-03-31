@@ -14,7 +14,7 @@ export function Footer() {
       <div className="container mx-auto px-6 py-12">
         {/* Top section */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
-          {/* Logo */}
+          
           <div className="flex flex-col leading-none">
             <span className="text-2xl font-black tracking-tighter text-cyan-400">PORTFOLIO</span>
             <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 mt-1">Unique Designs</span>
