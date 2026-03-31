@@ -19,5 +19,6 @@ body {
 }
 html, body {
   min-height: 100vh;
+  /*background: #000;*/
   height: 100%;
 }

@@ -4,10 +4,7 @@ import { Hero } from "@/components/Hero/Hero";
 import { BentoGrid } from "@/components/BentoGrid/BentoGrid";
 import { ProjectsCarousel } from "@/components/ProjectsCarousel/ProjectsCarousel";
 import { Footer } from "@/components/Footer";
-import { useScrollBackground } from "@/hooks/useScrollBackground";
 export default function Home() {
-  const { activeSection } = useScrollBackground();
-
   return (
     <main className="min-h-screen  text-white selection:bg-cyan-500/30">
       <Navbar />
