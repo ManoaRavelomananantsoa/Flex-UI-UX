@@ -21,7 +21,7 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Middle section - CTA */}
+       
         <div className="border-t border-b border-white/5 py-12 mb-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
