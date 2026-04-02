@@ -141,7 +141,6 @@
 
 
 
-
 "use client";
 import { useEffect, useRef } from "react";
 
@@ -156,7 +155,7 @@ export default function ParallaxNeonBackground() {
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
-    
+
     const ctx = canvas.getContext("2d", { alpha: true })!;
 
     let W: number, H: number;
@@ -168,41 +167,114 @@ export default function ParallaxNeonBackground() {
     window.addEventListener("resize", resize);
 
     const rand = (min: number, max: number) => min + Math.random() * (max - min);
-    
-    // On garde uniquement les étoiles néon pour le dynamisme
-    const starsNeon = Array.from({ length: 35 }, () => ({
-      x: rand(0, 1), 
-      y: rand(0, 1), 
-      r: rand(1.2, 2.8), 
-      hue: rand(185, 215) // Teintes bleutées néon
+
+    // cyan-400 = hsl(189, 94%, 53%) → hue ~189
+    // blue-600 = hsl(221, 83%, 53%)  → hue ~221
+    // On interpole aléatoirement dans cette plage
+    const randHue = () => rand(189, 221);
+    const randSat = () => rand(80, 100);
+    const randLit = () => rand(55, 75);
+
+    const drawStar4 = (
+      cx: number, cy: number,
+      outerR: number,
+      hue: number, sat: number, lit: number
+    ) => {
+      const innerR = outerR * 0.22;
+      const spikes = 4;
+      const step = Math.PI / spikes; // 45°
+
+      // --- Halo circulaire radial doux ---
+      const haloR = outerR * 8;
+      const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, haloR);
+      grad.addColorStop(0,   `hsla(${hue}, ${sat}%, ${lit + 15}%, 0.55)`);
+      grad.addColorStop(0.3, `hsla(${hue}, ${sat}%, ${lit}%, 0.20)`);
+      grad.addColorStop(1,   `hsla(${hue}, ${sat}%, ${lit}%, 0)`);
+      ctx.beginPath();
+      ctx.arc(cx, cy, haloR, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // --- 3 couches de lueur en forme d'étoile ---
+      for (let layer = 3; layer >= 1; layer--) {
+        const scale = layer * 2.8;
+        ctx.beginPath();
+        for (let i = 0; i < spikes * 2; i++) {
+          const angle = i * step - Math.PI / 2;
+          const r = i % 2 === 0 ? outerR * scale : innerR * scale;
+          i === 0
+            ? ctx.moveTo(cx + Math.cos(angle) * r, cy + Math.sin(angle) * r)
+            : ctx.lineTo(cx + Math.cos(angle) * r, cy + Math.sin(angle) * r);
+        }
+        ctx.closePath();
+        ctx.fillStyle = `hsla(${hue}, ${sat}%, ${lit}%, ${0.12 / layer})`;
+        ctx.fill();
+      }
+
+      // --- Corps de l'étoile 4 branches net ---
+      ctx.beginPath();
+      for (let i = 0; i < spikes * 2; i++) {
+        const angle = i * step - Math.PI / 2;
+        const r = i % 2 === 0 ? outerR : innerR;
+        i === 0
+          ? ctx.moveTo(cx + Math.cos(angle) * r, cy + Math.sin(angle) * r)
+          : ctx.lineTo(cx + Math.cos(angle) * r, cy + Math.sin(angle) * r);
+      }
+      ctx.closePath();
+      // Dégradé cyan→bleu sur le corps
+      const bodyGrad = ctx.createLinearGradient(cx - outerR, cy, cx + outerR, cy);
+      bodyGrad.addColorStop(0,   `hsl(189, 94%, 80%)`); // cyan-400 clair
+      bodyGrad.addColorStop(0.5, `hsl(${hue}, ${sat}%, 92%)`); // blanc chaud au centre
+      bodyGrad.addColorStop(1,   `hsl(221, 83%, 75%)`); // blue-600 clair
+      ctx.fillStyle = bodyGrad;
+      ctx.fill();
+
+      // --- Pic central surbrillant ---
+      const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, outerR);
+      cg.addColorStop(0,   "rgba(255,255,255,1)");
+      cg.addColorStop(0.4, `hsla(${hue}, 100%, 90%, 0.7)`);
+      cg.addColorStop(1,   "rgba(255,255,255,0)");
+      ctx.beginPath();
+      ctx.arc(cx, cy, outerR, 0, Math.PI * 2);
+      ctx.fillStyle = cg;
+      ctx.fill();
+    };
+
+    // Couche lointaine — petites, froides, parallax lente
+    const starsFar = Array.from({ length: 60 }, () => ({
+      x: rand(0, 1), y: rand(0, 1),
+      r: rand(0.8, 1.8),
+      hue: randHue(), sat: randSat(), lit: randLit(),
+    }));
+
+    // Couche proche — grandes, vives, parallax rapide
+    const starsNear = Array.from({ length: 38 }, () => ({
+      x: rand(0, 1), y: rand(0, 1),
+      r: rand(2.0, 3.6),
+      hue: randHue(), sat: randSat(), lit: randLit(),
     }));
 
     const onScroll = () => { scrollYRef.current = window.scrollY; };
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    const render = (time: number) => {
+    const render = () => {
       smoothScrollRef.current += (scrollYRef.current - smoothScrollRef.current) * 0.06;
       const sy = smoothScrollRef.current;
 
-      // --- PARALLAX INVERSÉ SUR L'IMAGE DE FOND ---
-      // On utilise une valeur négative (-sy * 0.05) pour que l'image monte quand on scroll vers le bas
-      container.style.setProperty('--bg-parallax-y', `${-sy * 0.05}px`);
-
+      container.style.setProperty("--bg-parallax-y", `${-sy * 0.05}px`);
       ctx.clearRect(0, 0, W, H);
       ctx.globalCompositeOperation = "screen";
 
-      // --- DESSIN DES ÉTOILES NÉON UNIQUEMENT ---
-      starsNeon.forEach(s => {
-        // Les étoiles bougent plus vite (0.3) pour se détacher du fond
+      // Couche lointaine (parallax 0.12)
+      starsFar.forEach(s => {
+        const y = ((s.y * H - sy * 0.12) % H + H) % H;
+        drawStar4(s.x * W, y, s.r, s.hue, s.sat, s.lit);
+      });
+
+      // Couche proche (parallax 0.3)
+      starsNear.forEach(s => {
         const y = ((s.y * H - sy * 0.3) % H + H) % H;
-        const x = s.x * W;
-        
-        // Effet de lueur multicouche (sans blur pour la performance)
-        ctx.fillStyle = `hsla(${s.hue}, 100%, 55%, 0.25)`;
-        ctx.beginPath(); ctx.arc(x, y, s.r * 5, 0, Math.PI * 2); ctx.fill();
-        
-        ctx.fillStyle = "#fff";
-        ctx.beginPath(); ctx.arc(x, y, s.r, 0, Math.PI * 2); ctx.fill();
+        drawStar4(s.x * W, y, s.r, s.hue, s.sat, s.lit);
       });
 
       rafId.current = requestAnimationFrame(render);
@@ -219,24 +291,15 @@ export default function ParallaxNeonBackground() {
 
   return (
     <div ref={containerRef} className="fixed inset-0 z-[-1] overflow-hidden bg-[#00040a]">
-      {/* L'IMAGE DE FOND EN SENS CONTRAIRE */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ 
+        style={{
           backgroundImage: "url('/images/parallax background.png')",
-          // scale(1.2) donne assez de marge pour le mouvement négatif sans bordures
           transform: "scale(1.2) translateY(var(--bg-parallax-y, 0px))",
           willChange: "transform",
         }}
       />
-      
-      {/* CANVAS NÉON ÉPURÉ */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 pointer-events-none"
-      />
-      
-      {/* Overlay sombre pour la lisibilité */}
+      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/50 pointer-events-none" />
     </div>
   );
