@@ -127,7 +127,7 @@ export function ProjectsCarousel() {
             </button>
 
             {/* Projet actuel */}
-            <div className="w-full max-w-4xl mx-auto" style={{ boxShadow: '0 0 40px rgba(6, 182, 212, 0.8)', borderRadius: '1.5rem' }}>
+            <div className="w-full max-w-4xl mx-auto" >
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentIndex}
@@ -136,6 +136,7 @@ export function ProjectsCarousel() {
                   exit={{ opacity: 0, x: -100 }}
                   transition={{ duration: 0.5, ease: "easeInOut" }}
                   className="relative"
+                  style={{ boxShadow: '0 0 80px rgba(6, 182, 212, 1)', borderRadius: '1.5rem' }}
                 >
                   <div className="transparent backdrop-blur-sm rounded-3xl border border-zinc-700/50 overflow-hidden shadow-2xl">
                     {/* Image du projet */}
@@ -152,7 +153,7 @@ export function ProjectsCarousel() {
                     </div>
 
                     {/* Contenu */}
-                    <div className="p-8 bg-black/30">
+                    <div className="p-8 bg-black/30" >
                       <div className="flex items-center gap-4 mb-6">
                         <div className={`p-3 bg-linear-to-br ${projects[currentIndex].color} rounded-xl text-white`}>
                           {projects[currentIndex].icon}

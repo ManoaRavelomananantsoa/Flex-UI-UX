@@ -19,7 +19,18 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="mb-8">
             <span className="text-cyan-400 font-mono text-sm uppercase tracking-widest">Our Services</span>
-            <h2 className="text-5xl font-bold mt-2 tracking-tighter">WHAT WE DO?</h2>
+            <h2 
+              className="text-5xl font-bold mt-2 tracking-tighter"
+              style={{
+                fontFamily: "'Orbitron', monospace",
+                fontSize: 48,
+                fontWeight: 700,
+                letterSpacing: "0.05em",
+                textTransform: "uppercase",
+              }}
+            >
+              WHAT WE DO?
+            </h2>
           </div>
           <BentoGrid />
         </div>

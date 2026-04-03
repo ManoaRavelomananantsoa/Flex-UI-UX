@@ -38,7 +38,6 @@ const items = [
   },
 ];
 
-
 export function BentoGrid() {
   const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
@@ -77,69 +76,82 @@ export function BentoGrid() {
 
   return (
     <section className="bento-section">
-        <div className="bento-container">
+      <div className="bento-container">
 
-          <div className="bento-header">
-            <Sparkles size={18} color="#22d3ee" />
-            <h2 className="bento-header-text">Mes compétences</h2>
-          </div>
+        <div className="bento-header">
+          <Sparkles size={18} color="#22d3ee" />
+          <h2 className="bento-header-text">Mes compétences</h2>
+        </div>
 
-          <div className="bento-grid">
-            {items.map((item, i) => (
+        <div className="bento-grid">
+          {items.map((item, i) => (
+            <div key={i} className={item.spanTwo ? "bento-span-two" : ""}>
+
+              {/* Couche scroll reveal */}
               <div
-                key={i}
-                className={item.spanTwo ? "bento-span-two" : ""}
+                ref={(el) => { scrollRefs.current[i] = el; }}
+                className={`bento-scroll-layer${visibleCards.has(i) ? " in-view" : ""}`}
               >
-                {/* Couche 1 — scroll animation (opacity + translate) */}
-                <div
-                  ref={(el) => { scrollRefs.current[i] = el; }}
-                  className={`bento-scroll-layer${visibleCards.has(i) ? " in-view" : ""}`}
-                >
-                  {/* Couche 2 — perspective */}
-                  <div className="bento-perspective">
+                {/* Perspective */}
+                <div className="bento-perspective">
 
-                    {/* Couche 3 — flip */}
-                    <div
-                      onClick={() => toggleCard(i)}
-                      className={`bento-inner${flippedCards.has(i) ? " is-flipped" : ""}`}
-                    >
-                      {/* FACE AVANT */}
-                      {/* FACE AVANT */}
-                      <div className="bento-face bento-front">
-                        <div className="bento-front-mask" />
-                        <div className="bento-neon2" />
-                        <div className="bento-neon2-glow" />
-                        <div>
-                          <div className="bento-icon-box">{item.icon}</div>
-                          <h3 className="bento-card-title">{item.title}</h3>
-                          <p className="bento-card-desc">{item.description}</p>
-                        </div>
-                        <div className="bento-hint">
-                          Détails <ArrowRight size={12} />
-                        </div>
+                  {/* Flip */}
+                  <div
+                    onClick={() => toggleCard(i)}
+                    className={`bento-inner${flippedCards.has(i) ? " is-flipped" : ""}`}
+                  >
+
+                    {/* ── FACE AVANT ── */}
+                    <div className="bento-face bento-front">
+
+                      {/* Arcs neon rotatifs */}
+                      <div className="bento-neon2" />
+                      <div className="bento-neon2-glow" />
+
+                      {/* Masque fond noir */}
+                      <div className="bento-front-mask" />
+
+                      {/* Accents coins angulaires */}
+                      <div className="bento-corner-accent bento-corner-tr" />
+                      <div className="bento-corner-accent bento-corner-bl" />
+
+                      {/* Ligne accent coin haut-gauche */}
+                      <div className="bento-cut-line" />
+
+                      {/* Contenu */}
+                      <div>
+                        <div className="bento-icon-box">{item.icon}</div>
+                        <h3 className="bento-card-title">{item.title}</h3>
+                        <p className="bento-card-desc">{item.description}</p>
                       </div>
 
-                      {/* FACE ARRIÈRE */}
-                      <div
-                        className="bento-face bento-back"
-                        style={{ backgroundColor: item.color }}
-                      >
-                        <h3 className="bento-back-title">Stack Technique</h3>
-                        <div className="bento-tags">
-                          {item.backDescription.split(", ").map((tech, idx) => (
-                            <span key={idx} className="bento-tag">{tech}</span>
-                          ))}
-                        </div>
+                      <div className="bento-hint">
+                        Détails <ArrowRight size={12} />
+                      </div>
+                    </div>
+
+                    {/* ── FACE ARRIÈRE ── */}
+                    <div
+                      className="bento-face bento-back"
+                      style={{ backgroundColor: item.color }}
+                    >
+                      <h3 className="bento-back-title">Stack Technique</h3>
+                      <div className="bento-tags">
+                        {item.backDescription.split(", ").map((tech, idx) => (
+                          <span key={idx} className="bento-tag">{tech}</span>
+                        ))}
                       </div>
                     </div>
 
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
 
+            </div>
+          ))}
         </div>
-      </section>
+
+      </div>
+    </section>
   );
 }
