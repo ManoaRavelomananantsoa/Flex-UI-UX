@@ -99,6 +99,7 @@ const designProjects = [
   { title: "WEB APP", icon: <Figma size={16} />, image: "/images/designs/webApp.png", index: "03" },
   { title: "FULLSTACK", icon: <PenTool size={16} />, image: "/images/designs/fullStack.png", index: "04" },
   { title: "MOTION", icon: <Sparkles size={16} />, image: "/images/designs/motion.png", index: "05" },
+  
 ];
 
 function GlitchText({ children }: { children: string }) {
