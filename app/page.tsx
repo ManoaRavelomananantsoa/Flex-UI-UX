@@ -31,6 +31,13 @@ export default function Home() {
             >
               WHAT WE DO?
             </h2>
+            <div
+              className="h-px w-48 mt-1"
+              style={{ background: "linear-gradient(90deg, rgba(41,182,232,1), transparent)" }}
+            />
+             <p className="text-sm font-light mt-2" style={{ color: "rgba(170,210,235,.6)", maxWidth: 480 }}>
+              Découvrez mes expertises en développement web et mobile.
+            </p>
           </div>
           <BentoGrid />
         </div>
