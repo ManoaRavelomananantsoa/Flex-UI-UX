@@ -103,12 +103,12 @@ const STYLES = `
 
   .ds-float-overlay h3 {
     font-family: 'Orbitron', sans-serif;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 8px 30px rgba(0, 0, 0, 0.8);
   }
 
   .ds-float-overlay span {
     font-family: 'Orbitron', sans-serif;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    text-shadow: 0 3px 15px rgba(255, 255,255, 0.95), 0 6px 25px rgba(0, 0, 0, 0.9);
   }
 
   .ds-float-overlay button {
@@ -117,6 +117,46 @@ const STYLES = `
     letter-spacing: 0.1em;
     font-weight: 600;
     clip-path: polygon(0 0, 100% 0, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+    position: relative;
+    border: 1px solid rgba(0, 207, 255, 0.8);
+    transition: all 0.3s ease;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .ds-float-overlay button::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0%,
+      rgba(0, 207, 255, 0.8) 25%,
+      /* rgba(0, 255, 255, 1) 50%, */
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(0, 207, 255, 0.8) 75%,
+      transparent 100%
+    );
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    filter: blur(4px);
+  }
+
+  .ds-float-overlay button:hover::before {
+    opacity: 1;
+    animation: rotate-neon 2s linear infinite;
+  }
+
+  .ds-float-overlay button:hover {
+    border-color: rgba(0, 207, 255, 0.8);
+    box-shadow: 0 0 15px rgba(0, 207, 255, 0.5), inset 0 0 10px rgba(0, 207, 255, 0.1);
+  }
+
+  @keyframes rotate-neon {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 `;
 
@@ -270,15 +310,17 @@ export default function DesignsCarousel3D() {
                       </div>
                       
                       <AnimatePresence>
-                        {isActive && (
-                          <motion.button 
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            className="mt-4 flex items-center gap-2 text-[10px] bg-cyan-500/10 border border-cyan-500/50 text-cyan-400 px-4 py-2 hover:bg-cyan-500 hover:text-black transition-all"
-                          >
-                            ACCESS <ExternalLink size={10} />
-                          </motion.button>
-                        )}
+                        <motion.button 
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: isActive ? 1 : 0.6, x: 0 }}
+                          className={`mt-4 flex items-center gap-2 text-[10px] px-4 py-2 transition-all ${
+                            isActive 
+                              ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500 hover:text-black' 
+                              : 'bg-zinc-900/50 border-zinc-700/50 text-zinc-500'
+                          } border`}
+                        >
+                          ACCESS <ExternalLink size={10} />
+                        </motion.button>
                       </AnimatePresence>
                     </div>
                   </div>

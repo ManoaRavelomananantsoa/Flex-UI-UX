@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 export function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
   const pathname = usePathname();
-  const isPageRoute = pathname === "/designs" || pathname === "/services";
+  const isPageRoute = pathname === "/designs" || pathname === "/services" || pathname === "/about";
 
   useEffect(() => {
     if (isPageRoute) return;
@@ -57,14 +57,24 @@ export function Navbar() {
             const isDesigns = item.id === "designs";
             const isHome = item.id === "home";
             const isServices = item.id === "services";
-            const href = isHome ? "/" : isDesigns ? "/designs" : isServices ? "/services" : `#${item.id}`;
-            const isActive = isPageRoute 
-              ? pathname === `/${item.id}`
-              : pathname === "/" && item.id === "home"
-              ? true
-              : activeSection === item.id;
+            const isAbout = item.id === "about";
+            const href = isHome ? "/" : isDesigns ? "/designs" : isServices ? "/services" : isAbout ? "/about" : `#${item.id}`;
+            
+            // Déterminer si l'item est actif
+            let isActive = false;
+            if (pathname === "/" && isHome) {
+              isActive = true;
+            } else if (pathname === "/designs" && isDesigns) {
+              isActive = true;
+            } else if (pathname === "/services" && isServices) {
+              isActive = true;
+            } else if (pathname === "/about" && isAbout) {
+              isActive = true;
+            } else if (!isPageRoute && activeSection === item.id) {
+              isActive = true;
+            }
 
-            return isHome || isDesigns || isServices ? (
+            return isHome || isDesigns || isServices || isAbout ? (
               <Link
                 key={item.id}
                 href={href}
