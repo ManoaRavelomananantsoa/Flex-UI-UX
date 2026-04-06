@@ -20,6 +20,116 @@ const STYLES = `
     to { --angle: 360deg; }
   }
 
+  /* ── LAYOUT PRINCIPAL ── */
+  .designs-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    min-height: calc(100vh - 6rem);
+    padding: 0 4rem;
+    gap: 2rem;
+  }
+
+  @media (max-width: 900px) {
+    .designs-layout {
+      grid-template-columns: 1fr;
+      padding: 2rem 1.5rem;
+    }
+    .designs-left {
+      text-align: center;
+    }
+  }
+
+  /* ── PANNEAU GAUCHE ── */
+  .designs-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-right: 2rem;
+  }
+
+  .designs-eyebrow {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: rgba(0, 207, 255, 0.6);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .designs-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: rgba(0, 207, 255, 0.5);
+  }
+
+  .designs-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+
+  .designs-title .accent {
+    background: linear-gradient(90deg, #1be7ff 0%, #1a8fff 60%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .designs-desc {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.8;
+    max-width: 420px;
+  }
+
+  .designs-stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .designs-stat-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #00cfff;
+    display: block;
+    line-height: 1;
+  }
+
+  .designs-stat-label {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 4px;
+    display: block;
+  }
+
+  .designs-divider {
+    width: 48px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(0,207,255,0.6), transparent);
+    margin: 0.5rem 0;
+  }
+
+  /* ── PANNEAU DROIT (carousel) ── */
+  .designs-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
   .scene-3d {
     perspective: 1500px;
     display: flex;
@@ -32,7 +142,7 @@ const STYLES = `
 
   .carousel-3d {
     position: relative;
-    width: 260px; /* Plus étroit */
+    width: 260px;
     height: 380px;
     transform-style: preserve-3d;
     transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -44,17 +154,15 @@ const STYLES = `
     backface-visibility: hidden;
   }
 
-  /* ── L'ANIMATION DE BORDURE (uniquement active) ── */
   .ds-card-inner {
     position: relative;
     background: #09090b;
     height: 100%;
     clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
-    padding: 1px; /* Espace pour la bordure */
+    padding: 1px;
     overflow: hidden;
   }
 
-  /* La bordure animée (pseudo-élément) */
   .active .ds-card-inner::before {
     content: '';
     position: absolute;
@@ -70,7 +178,6 @@ const STYLES = `
     z-index: 0;
   }
 
-  /* Le fond de la carte par-dessus la bordure */
   .ds-card-content {
     position: relative;
     z-index: 1;
@@ -124,39 +231,9 @@ const STYLES = `
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }
 
-  .ds-float-overlay button::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    background: conic-gradient(
-      from 0deg,
-      transparent 0%,
-      rgba(0, 207, 255, 0.8) 25%,
-      /* rgba(0, 255, 255, 1) 50%, */
-      rgba(255, 255, 255, 0.8) 50%,
-      rgba(0, 207, 255, 0.8) 75%,
-      transparent 100%
-    );
-    border-radius: inherit;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    filter: blur(4px);
-  }
-
-  .ds-float-overlay button:hover::before {
-    opacity: 1;
-    animation: rotate-neon 2s linear infinite;
-  }
-
   .ds-float-overlay button:hover {
     border-color: rgba(0, 207, 255, 0.8);
     box-shadow: 0 0 15px rgba(0, 207, 255, 0.5), inset 0 0 10px rgba(0, 207, 255, 0.1);
-  }
-
-  @keyframes rotate-neon {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
   }
 `;
 
@@ -166,75 +243,7 @@ const designProjects = [
   { title: "WEB APP", icon: <Figma size={16} />, image: "/images/designs/webApp.png", index: "03" },
   { title: "FULLSTACK", icon: <PenTool size={16} />, image: "/images/designs/fullStack.png", index: "04" },
   { title: "MOTION", icon: <Sparkles size={16} />, image: "/images/designs/motion.png", index: "05" },
-  
 ];
-
-function GlitchText({ children }: { children: string }) {
-  return (
-    <span className="relative inline-block" style={{ lineHeight: "inherit" }}>
-      {/* Calque rouge */}
-      <span
-        aria-hidden
-        className="absolute inset-0 select-none"
-        style={{
-          background: "linear-gradient(90deg,#ff2d55,#ff6b6b)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
-          animation: "glitch-r 2s 0.5s infinite",
-          opacity: 0,
-        }}
-      >
-        {children}
-      </span>
-
-      {/* Calque cyan */}
-      <span
-        aria-hidden
-        className="absolute inset-0 select-none"
-        style={{
-          background: "linear-gradient(90deg,#00ffea,#0af)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
-          animation: "glitch-c 4s 0.5s infinite",
-          opacity: 0,
-        }}
-      >
-        {children}
-      </span>
-
-      {/* Texte principal */}
-      <span
-        className="relative z-10"
-        style={{
-          background: "linear-gradient(90deg,#1be7ff 0%,#1a8fff 60%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
-          animation: "glitch-main 4s 0.5s infinite",
-          display: "inline-block",
-        }}
-      >
-        {children}
-      </span>
-
-      {/* Scan line */}
-      <span
-        aria-hidden
-        className="absolute pointer-events-none z-20"
-        style={{
-          left: "-4px",
-          right: "-4px",
-          height: "3px",
-          background: "rgba(27,231,255,0.6)",
-          animation: "slice 4s 0.5s infinite",
-          opacity: 0,
-        }}
-      />
-    </span>
-  );
-}
 
 export default function DesignsCarousel3D() {
   const [rotation, setRotation] = useState(0);
@@ -242,14 +251,12 @@ export default function DesignsCarousel3D() {
   
   const count = designProjects.length;
   const angleStep = 360 / count;
-  const radius = 300; // Rayon ajusté pour l'étroitesse
+  const radius = 300;
 
   const rotate = (dir: number) => {
     setRotation(prev => prev + (dir * angleStep));
     setActiveIdx(prev => (prev - dir + count) % count);
   };
-
-  
 
   return (
     <>
@@ -257,95 +264,131 @@ export default function DesignsCarousel3D() {
       <main className="min-h-screen bg-transparent text-white">
         <Navbar />
 
-        <section className="pt-32 flex flex-col items-center">
-          
+        <section className="pt-24 designs-layout">
 
-          <div className="scene-3d">
-            <div className="carousel-3d" style={{ transform: `rotateY(${rotation}deg)` }}>
-              {designProjects.map((p, i) => {
-                const isActive = i === activeIdx;
-                const itemAngle = i * angleStep;
+          {/* ══ PANNEAU GAUCHE ══ */}
+          <div className="designs-left">
+            <span className="designs-eyebrow">PORTFOLIO CRÉATIF</span>
 
-                return (
-                  <div
-                    key={i}
-                    className={`ds-card-3d ${isActive ? 'active' : ''}`}
-                    style={{ transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`, transformStyle: 'preserve-3d' }}
-                  >
-                    {/* La carte (surface) avec uniquement l'image */}
-                    <div className="ds-card-inner" style={{ transformStyle: 'preserve-3d' }}>
-                      <div className="ds-card-content">
-                        <div className="ds-corner ds-corner-tr" />
-                        <div className="ds-corner ds-corner-bl" />
-                        
-                        {/* Image uniquement ici */}
-                        <div className="h-full bg-gray-900 relative">
-                          <img 
-                            src={p.image} 
-                            alt={p.title}
-                            className={`w-full h-full object-cover transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-20 grayscale'}`}
-                          />
-                          <div className="absolute inset-0 bg-linear-to-t from-[#09090b] to-transparent" />
+            <h1 className="designs-title">
+              Mes<br />
+              <span className="accent">Créations</span><br />
+              Design
+            </h1>
+
+            <div className="designs-divider" />
+
+            <p className="designs-desc">
+              Explorez l'ensemble de mes projets visuels — interfaces utilisateur, 
+              applications mobiles, expériences web et motion design. Chaque projet 
+              reflète une approche singulière, pensée pour allier esthétique et fonctionnalité.
+            </p>
+
+            <div className="designs-stats">
+              <div>
+                <span className="designs-stat-num">0{count}</span>
+                <span className="designs-stat-label">PROJETS</span>
+              </div>
+              <div>
+                <span className="designs-stat-num">UI</span>
+                <span className="designs-stat-label">SPÉCIALITÉ</span>
+              </div>
+              <div>
+                <span className="designs-stat-num">∞</span>
+                <span className="designs-stat-label">CRÉATIVITÉ</span>
+              </div>
+            </div>
+          </div>
+
+          {/* ══ PANNEAU DROIT — CAROUSEL ══ */}
+          <div className="designs-right">
+            <div className="scene-3d">
+              <div className="carousel-3d" style={{ transform: `rotateY(${rotation}deg)` }}>
+                {designProjects.map((p, i) => {
+                  const isActive = i === activeIdx;
+                  const itemAngle = i * angleStep;
+
+                  return (
+                    <div
+                      key={i}
+                      className={`ds-card-3d ${isActive ? 'active' : ''}`}
+                      style={{ transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`, transformStyle: 'preserve-3d' }}
+                    >
+                      {/* La carte (surface) avec uniquement l'image */}
+                      <div className="ds-card-inner" style={{ transformStyle: 'preserve-3d' }}>
+                        <div className="ds-card-content">
+                          <div className="ds-corner ds-corner-tr" />
+                          <div className="ds-corner ds-corner-bl" />
+                          
+                          <div className="h-full bg-gray-900 relative">
+                            <img 
+                              src={p.image} 
+                              alt={p.title}
+                              className={`w-full h-full object-cover transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-20 grayscale'}`}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#09090b] to-transparent" />
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* TEXTE FLOTTANT — hors du card-content, translateZ positif */}
-                    <div 
-                      className="ds-float-overlay" 
-                      style={{ 
-                        transform: 'translateZ(40px)', 
-                        position: 'absolute', 
-                        bottom: 0, 
-                        left: 0, 
-                        right: 0, 
-                        padding: '1.25rem',
-                        transformStyle: 'preserve-3d'
-                      }}
-                    >
-                      <span className="text-[9px] text-cyan-500 font-bold mb-1 block tracking-[0.3em]">ID-{p.index}</span>
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="text-cyan-400">{p.icon}</span>
-                        <h3 className="text-xs font-bold tracking-widest leading-none text-white">{p.title}</h3>
+                      {/* TEXTE FLOTTANT */}
+                      <div 
+                        className="ds-float-overlay" 
+                        style={{ 
+                          transform: 'translateZ(40px)', 
+                          position: 'absolute', 
+                          bottom: 0, 
+                          left: 0, 
+                          right: 0, 
+                          padding: '1.25rem',
+                          transformStyle: 'preserve-3d'
+                        }}
+                      >
+                        <span className="text-[9px] text-cyan-500 font-bold mb-1 block tracking-[0.3em]">ID-{p.index}</span>
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="text-cyan-400">{p.icon}</span>
+                          <h3 className="text-xs font-bold tracking-widest leading-none text-white">{p.title}</h3>
+                        </div>
+                        
+                        <AnimatePresence>
+                          <motion.button 
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: isActive ? 1 : 0.6, x: 0 }}
+                            className={`mt-4 flex items-center gap-2 text-[10px] px-4 py-2 transition-all ${
+                              isActive 
+                                ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500 hover:text-black' 
+                                : 'bg-zinc-900/50 border-zinc-700/50 text-zinc-500'
+                            } border`}
+                          >
+                            ACCÉDER <ExternalLink size={10} />
+                          </motion.button>
+                        </AnimatePresence>
                       </div>
-                      
-                      <AnimatePresence>
-                        <motion.button 
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: isActive ? 1 : 0.6, x: 0 }}
-                          className={`mt-4 flex items-center gap-2 text-[10px] px-4 py-2 transition-all ${
-                            isActive 
-                              ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500 hover:text-black' 
-                              : 'bg-zinc-900/50 border-zinc-700/50 text-zinc-500'
-                          } border`}
-                        >
-                          ACCESS <ExternalLink size={10} />
-                        </motion.button>
-                      </AnimatePresence>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          {/* Navigation Controls */}
-          <div className="flex items-center gap-12 mt-8">
-            <button onClick={() => rotate(1)} className="group relative p-4 outline-none">
+            {/* Navigation Controls */}
+            <div className="flex items-center gap-12">
+              <button onClick={() => rotate(1)} className="group relative p-4 outline-none">
                 <div className="absolute inset-0 scale-75 group-hover:scale-100 transition-transform border border-cyan-500/20 rounded-full" />
                 <ChevronLeft className="text-cyan-500 group-hover:text-white transition-colors" />
-            </button>
+              </button>
 
-            <div className="text-center">
+              <div className="text-center">
                 <div className="text-[10px] ds-hud-label opacity-40 mb-1">POSITION</div>
                 <div className="font-bold text-xl text-cyan-500 tracking-tighter">0{activeIdx + 1}</div>
-            </div>
+              </div>
 
-            <button onClick={() => rotate(-1)} className="group relative p-4 outline-none">
+              <button onClick={() => rotate(-1)} className="group relative p-4 outline-none">
                 <div className="absolute inset-0 scale-75 group-hover:scale-100 transition-transform border border-cyan-500/20 rounded-full" />
                 <ChevronRight className="text-cyan-500 group-hover:text-white transition-colors" />
-            </button>
+              </button>
+            </div>
           </div>
+
         </section>
       </main>
     </> 
