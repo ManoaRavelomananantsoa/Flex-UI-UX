@@ -91,6 +91,33 @@ const STYLES = `
     letter-spacing: 0.2em;
     color: rgba(0, 207, 255, 0.5);
   }
+
+  /* ── Overlay flottant pour texte et bouton ── */
+  .ds-float-overlay {
+    pointer-events: none;
+  }
+  
+  .ds-float-overlay > * {
+    pointer-events: auto;
+  }
+
+  .ds-float-overlay h3 {
+    font-family: 'Orbitron', sans-serif;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  }
+
+  .ds-float-overlay span {
+    font-family: 'Orbitron', sans-serif;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+  }
+
+  .ds-float-overlay button {
+    backdrop-filter: blur(4px);
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+  }
 `;
 
 const designProjects = [
@@ -203,15 +230,16 @@ export default function DesignsCarousel3D() {
                   <div
                     key={i}
                     className={`ds-card-3d ${isActive ? 'active' : ''}`}
-                    style={{ transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)` }}
+                    style={{ transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`, transformStyle: 'preserve-3d' }}
                   >
-                    <div className="ds-card-inner">
+                    {/* La carte (surface) avec uniquement l'image */}
+                    <div className="ds-card-inner" style={{ transformStyle: 'preserve-3d' }}>
                       <div className="ds-card-content">
                         <div className="ds-corner ds-corner-tr" />
                         <div className="ds-corner ds-corner-bl" />
                         
-                        {/* Image */}
-                        <div className="h-40 bg-gray-900 relative">
+                        {/* Image uniquement ici */}
+                        <div className="h-full bg-gray-900 relative">
                           <img 
                             src={p.image} 
                             alt={p.title}
@@ -219,28 +247,39 @@ export default function DesignsCarousel3D() {
                           />
                           <div className="absolute inset-0 bg-linear-to-t from-[#09090b] to-transparent" />
                         </div>
-
-                        {/* Text Content */}
-                        <div className="p-5">
-                          <span className="text-[9px] text-cyan-500 font-bold mb-1 block tracking-[0.3em]">ID-{p.index}</span>
-                          <div className="flex items-center gap-2 mb-3">
-                            <span className="text-cyan-400">{p.icon}</span>
-                            <h3 className="text-xs font-bold tracking-widest leading-none">{p.title}</h3>
-                          </div>
-                          
-                          <AnimatePresence>
-                            {isActive && (
-                              <motion.button 
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className="mt-4 flex items-center gap-2 text-[10px] bg-cyan-500/10 border border-cyan-500/50 text-cyan-400 px-4 py-2 hover:bg-cyan-500 hover:text-black transition-all"
-                              >
-                                ACCÉDER <ExternalLink size={10} />
-                              </motion.button>
-                            )}
-                          </AnimatePresence>
-                        </div>
                       </div>
+                    </div>
+
+                    {/* TEXTE FLOTTANT — hors du card-content, translateZ positif */}
+                    <div 
+                      className="ds-float-overlay" 
+                      style={{ 
+                        transform: 'translateZ(40px)', 
+                        position: 'absolute', 
+                        bottom: 0, 
+                        left: 0, 
+                        right: 0, 
+                        padding: '1.25rem',
+                        transformStyle: 'preserve-3d'
+                      }}
+                    >
+                      <span className="text-[9px] text-cyan-500 font-bold mb-1 block tracking-[0.3em]">ID-{p.index}</span>
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-cyan-400">{p.icon}</span>
+                        <h3 className="text-xs font-bold tracking-widest leading-none text-white">{p.title}</h3>
+                      </div>
+                      
+                      <AnimatePresence>
+                        {isActive && (
+                          <motion.button 
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="mt-4 flex items-center gap-2 text-[10px] bg-cyan-500/10 border border-cyan-500/50 text-cyan-400 px-4 py-2 hover:bg-cyan-500 hover:text-black transition-all"
+                          >
+                            ACCESS <ExternalLink size={10} />
+                          </motion.button>
+                        )}
+                      </AnimatePresence>
                     </div>
                   </div>
                 );

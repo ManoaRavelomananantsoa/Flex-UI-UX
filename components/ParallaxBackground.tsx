@@ -300,7 +300,7 @@ export default function ParallaxNeonBackground() {
         }}
       />
       <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/50 pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-b from-black/10 via-transparent to-black/50 pointer-events-none" />
     </div>
   );
 }
