@@ -5,8 +5,8 @@ import "./BentoGrid.css";
 
 const items = [
   {
-    title: "Expertise Frontend",
-    description: "Interfaces réactives avec Angular (RxJS/Signals) et Next.js.",
+    title: "Frontend Expertise",
+    description: "Responsive interfaces with Angular (RxJS/Signals) and Next.js.",
     backDescription: "Angular, Next.js, TypeScript, TailwindCSS",
     icon: <Layout size={24} color="#22d3ee" />,
     spanTwo: true,
@@ -14,7 +14,7 @@ const items = [
   },
   {
     title: "Full-Stack",
-    description: "Architectures MEAN & PEAN robustes.",
+    description: "Robust MEAN & PEAN architectures.",
     backDescription: "Node.js, Express, MongoDB, PostgreSQL",
     icon: <Server size={24} color="#34d399" />,
     spanTwo: false,
@@ -30,7 +30,7 @@ const items = [
   },
   {
     title: "Clean Code",
-    description: "SOLID & Design Patterns pour la scalabilité.",
+    description: "SOLID & Design Patterns for scalability.",
     backDescription: "SOLID, Clean Architecture, Repository Pattern",
     icon: <Code2 size={24} color="#a78bfa" />,
     spanTwo: true,
@@ -80,7 +80,7 @@ export function BentoGrid() {
 
         <div className="bento-header">
           <Sparkles size={18} color="#22d3ee" />
-          <h2 className="bento-header-text">Mes compétences</h2>
+          <h2 className="bento-header-text">My Skills</h2>
         </div>
 
         <div className="bento-grid">
@@ -126,7 +126,7 @@ export function BentoGrid() {
                       </div>
 
                       <div className="bento-hint">
-                        Détails <ArrowRight size={12} />
+                        Details <ArrowRight size={12} />
                       </div>
                     </div>
 
@@ -135,7 +135,7 @@ export function BentoGrid() {
                       className="bento-face bento-back"
                       style={{ backgroundColor: item.color }}
                     >
-                      <h3 className="bento-back-title">Stack Technique</h3>
+                      <h3 className="bento-back-title">Tech Stack</h3>
                       <div className="bento-tags">
                         {item.backDescription.split(", ").map((tech, idx) => (
                           <span key={idx} className="bento-tag">{tech}</span>

@@ -324,11 +324,11 @@ export function Hero() {
               maxWidth: 440,
             }}
           >
-            Spécialisé dans la conception d'applications robustes avec{" "}
+            Specialized in designing robust applications with{" "}
             <strong style={{ color: "#c8e8f8", fontWeight: 500 }}>Angular</strong>,{" "}
-            <strong style={{ color: "#c8e8f8", fontWeight: 500 }}>Node.js</strong> et les architectures{" "}
-            <strong style={{ color: "#c8e8f8", fontWeight: 500 }}>NoSQL/SQL</strong>.
-            Je transforme des logiques complexes en interfaces fluides et performantes.
+            <strong style={{ color: "#c8e8f8", fontWeight: 500 }}>Node.js</strong> and{" "}
+            <strong style={{ color: "#c8e8f8", fontWeight: 500 }}>NoSQL/SQL</strong> architectures.
+            I transform complex logic into smooth, high-performance interfaces.
           </motion.p>
 
           {/* Chips */}
