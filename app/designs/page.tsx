@@ -388,7 +388,6 @@ export default function DesignsCarousel3D() {
               </button>
             </div>
           </div>
-
         </section>
       </main>
     </> 

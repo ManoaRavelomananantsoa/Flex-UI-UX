@@ -7,15 +7,15 @@ import "./ProjectsCarousel.css";
 const projects = [
   {
     title: "Electro-view",
-    description: "Application de simulation graphique de tension et de l'intensité du courant dans un circuit en fonction du temps.",
+    description: "Graphical simulation application for voltage and current intensity in a circuit over time.",
     tech: ["PyQT5", "Python", "Matplotlib"],
     icon: <Globe className="h-6 w-6" />,
     color: "from-blue-500 to-purple-600",
     image: "images/projects/Electro-view.png",
   },
   {
-    title: "Gestion de carrière",
-    description: "Application de gestion de carrière avec classification des candidatures et suivi des processus.",
+    title: "Career Management",
+    description: "Career management application with application classification and process tracking.",
     tech: ["PostgreSQL", "Express", "Angular", "Node.js"],
     icon: <Code2 className="h-6 w-6" />,
     color: "from-green-500 to-teal-600",
@@ -23,7 +23,7 @@ const projects = [
   },
   {
     title: "Tri-Fako",
-    description: "Application mobile, portefeuille pour une distribution décentralisée destinée à encourager les utilisateurs à jeter leurs déchets dans les points de collecte.",
+    description: "Mobile app, wallet for decentralized distribution designed to encourage users to throw their waste into collection points.",
     tech: ["Angular", "D3.js", "Python", "PostgreSQL"],
     icon: <Database className="h-6 w-6" />,
     color: "from-emerald-500 to-cyan-600",
@@ -31,7 +31,7 @@ const projects = [
   },
   {
     title: "Color Detector",
-    description: "Application qui détecte la couleur d'un objet en temps réel via la caméra.",
+    description: "Application that detects the color of an object in real time via the camera.",
     tech: ["React Native", "TypeScript", "Firebase", "REST API"],
     icon: <Smartphone className="h-6 w-6" />,
     color: "from-cyan-500 to-blue-600",
@@ -78,19 +78,19 @@ export function ProjectsCarousel() {
           animate={isVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <span className="pc-hud">// projets récents</span>
+          <span className="pc-hud">// recent projects</span>
           <h2
             className="text-4xl md:text-5xl font-black text-white"
             style={{ fontFamily: "'Orbitron', monospace", letterSpacing: "-.01em" }}
           >
-            MES PROJETS
+            MY PROJECTS
           </h2>
           <div
             className="h-px w-48 mt-1"
             style={{ background: "linear-gradient(90deg, rgba(41,182,232,1), transparent)" }}
           />
           <p className="text-sm font-light mt-2" style={{ color: "rgba(170,210,235,.6)", maxWidth: 480 }}>
-            Découvrez mes réalisations récentes, des applications web aux solutions mobiles.
+            Discover my recent work, from web applications to mobile solutions.
           </p>
         </motion.div>
 
@@ -107,7 +107,7 @@ export function ProjectsCarousel() {
             <button
               className="pc-nav-btn flex-shrink-0"
               onClick={() => go(-1)}
-              aria-label="Projet précédent"
+              aria-label="Previous project"
             >
               <motion.svg width="22" height="22" viewBox="0 0 24 24" fill="none"
                 whileHover={{ x: -3 }} transition={{ duration: 0.2 }}>
@@ -233,10 +233,10 @@ export function ProjectsCarousel() {
                         {/* Boutons action */}
                         <div className="flex flex-wrap gap-3">
                           <button className="pc-btn pc-btn-ghost">
-                            <Github size={15} /> Voir le code
+                            <Github size={15} /> View Code
                           </button>
                           <button className="pc-btn pc-btn-primary">
-                            <ExternalLink size={15} /> Démo live
+                            <ExternalLink size={15} /> Live Demo
                           </button>
                         </div>
                       </div>
@@ -250,7 +250,7 @@ export function ProjectsCarousel() {
             <button
               className="pc-nav-btn flex-shrink-0"
               onClick={() => go(1)}
-              aria-label="Projet suivant"
+              aria-label="Next project"
             >
               <motion.svg width="22" height="22" viewBox="0 0 24 24" fill="none"
                 whileHover={{ x: 3 }} transition={{ duration: 0.2 }}>
@@ -267,7 +267,7 @@ export function ProjectsCarousel() {
                 className={`pc-dot ${i === currentIndex ? "active" : ""}`}
                 style={{ width: i === currentIndex ? 32 : 8 }}
                 onClick={() => { setDirection(i > currentIndex ? 1 : -1); setCurrentIndex(i); }}
-                aria-label={`Projet ${i + 1}`}
+                aria-label={`Project ${i + 1}`}
               />
             ))}
           </div>
