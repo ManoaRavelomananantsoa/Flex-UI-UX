@@ -7,13 +7,13 @@ import { usePathname } from "next/navigation";
 export function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
   const pathname = usePathname();
-  const isPageRoute = pathname === "/projects" || pathname === "/services" || pathname === "/about";
+  const isPageRoute = pathname === "/projects" || pathname === "/services" || pathname === "/about" || pathname === "/contact";
 
   useEffect(() => {
     if (isPageRoute) return;
 
     const handleScroll = () => {
-      const sections = ["home", "designs", "services", "about", "contact"];
+      const sections = ["home", "projects", "services", "about", "contact"];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
@@ -58,7 +58,8 @@ export function Navbar() {
             const isHome = item.id === "home";
             const isServices = item.id === "services";
             const isAbout = item.id === "about";
-            const href = isHome ? "/" : isProjects ? "/projects" : isServices ? "/services" : isAbout ? "/about" : `#${item.id}`;
+            const isContact = item.id === "contact";
+            const href = isHome ? "/" : isProjects ? "/projects" : isServices ? "/services" : isAbout ? "/about" : isContact ? "/contact" : `#${item.id}`;
             
             // Déterminer si l'item est actif
             let isActive = false;
@@ -70,11 +71,13 @@ export function Navbar() {
               isActive = true;
             } else if (pathname === "/about" && isAbout) {
               isActive = true;
+            } else if (pathname === "/contact" && isContact) {
+              isActive = true;
             } else if (!isPageRoute && activeSection === item.id) {
               isActive = true;
             }
 
-            return isHome || isProjects || isServices || isAbout ? (
+            return isHome || isProjects || isServices || isAbout || isContact ? (
               <Link
                 key={item.id}
                 href={href}
