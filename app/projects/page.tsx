@@ -1,12 +1,9 @@
 "use client";
 import { Navbar } from "@/components/Navbar";
 import { motion, AnimatePresence } from "framer-motion";
-import { Palette, Layers, Figma, PenTool, Sparkles, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
+import { Github, ExternalLink, Code2, Database, Globe, Smartphone, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
-/* ══════════════════════════════════════════════
-   STYLES HUD & ANIMATION DE BORDURE
-══════════════════════════════════════════════ */
 const STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;500&display=swap');
 
@@ -21,7 +18,7 @@ const STYLES = `
   }
 
   /* ── LAYOUT PRINCIPAL ── */
-  .designs-layout {
+  .projects-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
@@ -31,24 +28,24 @@ const STYLES = `
   }
 
   @media (max-width: 900px) {
-    .designs-layout {
+    .projects-layout {
       grid-template-columns: 1fr;
       padding: 2rem 1.5rem;
     }
-    .designs-left {
+    .projects-left {
       text-align: center;
     }
   }
 
   /* ── PANNEAU GAUCHE ── */
-  .designs-left {
+  .projects-left {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     padding-right: 2rem;
   }
 
-  .designs-eyebrow {
+  .projects-eyebrow {
     font-family: 'Orbitron', sans-serif;
     font-size: 10px;
     letter-spacing: 0.35em;
@@ -58,7 +55,7 @@ const STYLES = `
     gap: 10px;
   }
 
-  .designs-eyebrow::before {
+  .projects-eyebrow::before {
     content: '';
     display: inline-block;
     width: 32px;
@@ -66,7 +63,7 @@ const STYLES = `
     background: rgba(0, 207, 255, 0.5);
   }
 
-  .designs-title {
+  .projects-title {
     font-family: 'Orbitron', sans-serif;
     font-size: clamp(2rem, 4vw, 3.5rem);
     font-weight: 900;
@@ -75,14 +72,14 @@ const STYLES = `
     letter-spacing: -0.02em;
   }
 
-  .designs-title .accent {
+  .projects-title .accent {
     background: linear-gradient(90deg, #1be7ff 0%, #1a8fff 60%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .designs-desc {
+  .projects-desc {
     font-family: 'Exo 2', sans-serif;
     font-size: 0.95rem;
     font-weight: 300;
@@ -91,13 +88,13 @@ const STYLES = `
     max-width: 420px;
   }
 
-  .designs-stats {
+  .projects-stats {
     display: flex;
     gap: 2.5rem;
     margin-top: 0.5rem;
   }
 
-  .designs-stat-num {
+  .projects-stat-num {
     font-family: 'Orbitron', sans-serif;
     font-size: 1.6rem;
     font-weight: 700;
@@ -106,7 +103,7 @@ const STYLES = `
     line-height: 1;
   }
 
-  .designs-stat-label {
+  .projects-stat-label {
     font-family: 'Exo 2', sans-serif;
     font-size: 10px;
     letter-spacing: 0.2em;
@@ -115,7 +112,7 @@ const STYLES = `
     display: block;
   }
 
-  .designs-divider {
+  .projects-divider {
     width: 48px;
     height: 1px;
     background: linear-gradient(90deg, rgba(0,207,255,0.6), transparent);
@@ -123,7 +120,7 @@ const STYLES = `
   }
 
   /* ── PANNEAU DROIT (carousel) ── */
-  .designs-right {
+  .projects-right {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -237,19 +234,42 @@ const STYLES = `
   }
 `;
 
-const designProjects = [
-  { title: "UI SYSTEM", icon: <Layers size={16} />, image: "/images/designs/UIsystem.png", index: "01" },
-  { title: "MOBILE APP", icon: <Palette size={16} />, image: "/images/designs/mobileApp.png", index: "02" },
-  { title: "WEB APP", icon: <Figma size={16} />, image: "/images/designs/webApp.png", index: "03" },
-  { title: "FULLSTACK", icon: <PenTool size={16} />, image: "/images/designs/fullStack.png", index: "04" },
-  { title: "MOTION", icon: <Sparkles size={16} />, image: "/images/designs/motion.png", index: "05" },
+const projects = [
+  { 
+    title: "Electro-view", 
+    icon: <Globe size={16} />, 
+    image: "images/projects/Electro-view.png", 
+    index: "01",
+    description: "Graphical simulation application for voltage and current intensity"
+  },
+  { 
+    title: "Career Management", 
+    icon: <Code2 size={16} />, 
+    image: "images/projects/gestion-carriere.png", 
+    index: "02",
+    description: "Career management application with process tracking"
+  },
+  { 
+    title: "Tri-Fako", 
+    icon: <Database size={16} />, 
+    image: "images/projects/logo-trifako.png", 
+    index: "03",
+    description: "Mobile app for decentralized waste distribution"
+  },
+  { 
+    title: "Color Detector", 
+    icon: <Smartphone size={16} />, 
+    image: "images/projects/color-detector.png", 
+    index: "04",
+    description: "Real-time color detection via camera"
+  },
 ];
 
-export default function DesignsCarousel3D() {
+export default function ProjectsPage() {
   const [rotation, setRotation] = useState(0);
   const [activeIdx, setActiveIdx] = useState(0);
   
-  const count = designProjects.length;
+  const count = projects.length;
   const angleStep = 360 / count;
   const radius = 300;
 
@@ -264,47 +284,47 @@ export default function DesignsCarousel3D() {
       <main className="min-h-screen bg-transparent text-white">
         <Navbar />
 
-        <section className="pt-24 designs-layout">
+        <section className="pt-24 projects-layout">
 
           {/* ══ PANNEAU GAUCHE ══ */}
-          <div className="designs-left">
-            <span className="designs-eyebrow">PORTFOLIO CRÉATIF</span>
+          <div className="projects-left">
+            <span className="projects-eyebrow">MY PORTFOLIO</span>
 
-            <h1 className="designs-title">
-              Mes<br />
-              <span className="accent">Créations</span><br />
-              Design
+            <h1 className="projects-title">
+              My<br />
+              <span className="accent">Real</span><br />
+              Projects
             </h1>
 
-            <div className="designs-divider" />
+            <div className="projects-divider" />
 
-            <p className="designs-desc">
-              Explorez l'ensemble de mes projets visuels — interfaces utilisateur, 
-              applications mobiles, expériences web et motion design. Chaque projet 
-              reflète une approche singulière, pensée pour allier esthétique et fonctionnalité.
+            <p className="projects-desc">
+              Explore my complete development portfolio — from web applications 
+              and mobile solutions to full-stack systems. Each project showcases 
+              my expertise in modern technologies and clean architecture.
             </p>
 
-            <div className="designs-stats">
+            <div className="projects-stats">
               <div>
-                <span className="designs-stat-num">0{count}</span>
-                <span className="designs-stat-label">PROJETS</span>
+                <span className="projects-stat-num">0{count}</span>
+                <span className="projects-stat-label">PROJECTS</span>
               </div>
               <div>
-                <span className="designs-stat-num">UI</span>
-                <span className="designs-stat-label">SPÉCIALITÉ</span>
+                <span className="projects-stat-num">FS</span>
+                <span className="projects-stat-label">SPECIALTY</span>
               </div>
               <div>
-                <span className="designs-stat-num">∞</span>
-                <span className="designs-stat-label">CRÉATIVITÉ</span>
+                <span className="projects-stat-num">∞</span>
+                <span className="projects-stat-label">INNOVATION</span>
               </div>
             </div>
           </div>
 
           {/* ══ PANNEAU DROIT — CAROUSEL ══ */}
-          <div className="designs-right">
+          <div className="projects-right">
             <div className="scene-3d">
               <div className="carousel-3d" style={{ transform: `rotateY(${rotation}deg)` }}>
-                {designProjects.map((p, i) => {
+                {projects.map((p, i) => {
                   const isActive = i === activeIdx;
                   const itemAngle = i * angleStep;
 
@@ -325,8 +345,11 @@ export default function DesignsCarousel3D() {
                               src={p.image} 
                               alt={p.title}
                               className={`w-full h-full object-cover transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-20 grayscale'}`}
+                              onError={(e) => {
+                                e.currentTarget.src = "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80";
+                              }}
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#09090b] to-transparent" />
+                            <div className="absolute inset-0 bg-linear-to-t from-[#09090b] to-transparent" />
                           </div>
                         </div>
                       </div>
@@ -349,6 +372,7 @@ export default function DesignsCarousel3D() {
                           <span className="text-cyan-400">{p.icon}</span>
                           <h3 className="text-xs font-bold tracking-widest leading-none text-white">{p.title}</h3>
                         </div>
+                        <p className="text-[10px] text-zinc-400 leading-relaxed mb-3 max-w-[200px]">{p.description}</p>
                         
                         <AnimatePresence>
                           <motion.button 
@@ -360,7 +384,7 @@ export default function DesignsCarousel3D() {
                                 : 'bg-zinc-900/50 border-zinc-700/50 text-zinc-500'
                             } border`}
                           >
-                            ACCÉDER <ExternalLink size={10} />
+                            ACCESS <ExternalLink size={10} />
                           </motion.button>
                         </AnimatePresence>
                       </div>
@@ -390,6 +414,6 @@ export default function DesignsCarousel3D() {
           </div>
         </section>
       </main>
-    </> 
+    </>
   );
 }

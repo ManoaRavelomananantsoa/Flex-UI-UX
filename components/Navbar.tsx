@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 export function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
   const pathname = usePathname();
-  const isPageRoute = pathname === "/designs" || pathname === "/services" || pathname === "/about";
+  const isPageRoute = pathname === "/projects" || pathname === "/services" || pathname === "/about";
 
   useEffect(() => {
     if (isPageRoute) return;
@@ -35,7 +35,7 @@ export function Navbar() {
 
   const navItems = [
     { name: "Home", id: "home" },
-    { name: "Designs", id: "designs" },
+    { name: "Projects", id: "projects" },
     { name: "Services", id: "services" },
     { name: "About Me", id: "about" },
     { name: "Contact Me", id: "contact" }
@@ -54,17 +54,17 @@ export function Navbar() {
         {/* Liens de navigation (Cachés sur mobile pour le flex) */}
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => {
-            const isDesigns = item.id === "designs";
+            const isProjects = item.id === "projects";
             const isHome = item.id === "home";
             const isServices = item.id === "services";
             const isAbout = item.id === "about";
-            const href = isHome ? "/" : isDesigns ? "/designs" : isServices ? "/services" : isAbout ? "/about" : `#${item.id}`;
+            const href = isHome ? "/" : isProjects ? "/projects" : isServices ? "/services" : isAbout ? "/about" : `#${item.id}`;
             
             // Déterminer si l'item est actif
             let isActive = false;
             if (pathname === "/" && isHome) {
               isActive = true;
-            } else if (pathname === "/designs" && isDesigns) {
+            } else if (pathname === "/projects" && isProjects) {
               isActive = true;
             } else if (pathname === "/services" && isServices) {
               isActive = true;
@@ -74,7 +74,7 @@ export function Navbar() {
               isActive = true;
             }
 
-            return isHome || isDesigns || isServices || isAbout ? (
+            return isHome || isProjects || isServices || isAbout ? (
               <Link
                 key={item.id}
                 href={href}

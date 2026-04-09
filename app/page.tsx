@@ -2,7 +2,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero/Hero";
 import { BentoGrid } from "@/components/BentoGrid/BentoGrid";
-import { ProjectsCarousel } from "@/components/ProjectsCarousel/ProjectsCarousel";
 import { Footer } from "@/components/Footer";
 export default function Home() {
   return (
@@ -41,11 +40,6 @@ export default function Home() {
           </div>
           <BentoGrid />
         </div>
-      </section>
-
-      {/* Section 3: Projets (Carrousel) */}
-      <section id="section-projects" className="py-12">
-        <ProjectsCarousel />
       </section>
 
       {/* Footer */}
