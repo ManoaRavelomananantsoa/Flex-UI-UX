@@ -67,7 +67,7 @@ function AnimatedCounter({ target, suffix }: { target: number; suffix: string })
   }, [inView, target]);
 
   return (
-    <span ref={ref} className="font-orbitron text-3xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+    <span ref={ref} className="font-orbitron text-3xl font-black bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
       {count}{suffix}
     </span>
   );
@@ -129,7 +129,7 @@ function Terminal() {
         <span className="inline-block w-2 h-4 bg-cyan-400 align-middle animate-pulse" />
       </p>
       {/* Top shimmer line */}
-      <span className="absolute top-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-[shimmer_3s_linear_infinite]" />
+      <span className="absolute top-0 left-0 h-px w-full bg-linear-to-r from-transparent via-cyan-400 to-transparent animate-[shimmer_3s_linear_infinite]" />
     </div>
   );
 }
@@ -190,7 +190,7 @@ export default function AboutPage() {
             <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-none mb-6">
               <span className="text-[#e0f2ff]">ABOUT </span>
               <span
-                className="bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-400 bg-[length:200%_auto] bg-clip-text text-transparent"
+                className="bg-linear-to-r from-cyan-400 via-blue-400 to-cyan-400 bg-size-[200%_auto] bg-clip-text text-transparent"
                 style={{ animation: "shimmer 3s linear infinite" }}
               >
                 ME
@@ -201,7 +201,7 @@ export default function AboutPage() {
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 1, delay: 0.5 }}
-              className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
+              className="h-px w-24 mx-auto bg-linear-to-r from-transparent via-cyan-400 to-transparent"
             />
           </motion.div>
 
@@ -348,13 +348,13 @@ export default function AboutPage() {
                 <motion.span
                   animate={{ x: ["-100%", "100%"] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "linear", delay: i * 0.5 }}
-                  className="absolute top-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
+                  className="absolute top-0 left-0 h-px w-full bg-linear-to-r from-transparent via-cyan-400 to-transparent"
                 />
               </motion.div>
             ))}
           </div>
 
-          <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent mb-16" />
+          <div className="h-px bg-linear-to-r from-transparent via-cyan-400/30 to-transparent mb-16" />
 
           {/* ── SKILLS ── */}
           <motion.div
@@ -367,7 +367,7 @@ export default function AboutPage() {
             <div className="flex items-center gap-3 mb-8">
               <span className="text-cyan-400 text-lg">◈</span>
               <h3 className="font-mono text-sm tracking-[3px] text-cyan-400 uppercase">Technical Skills</h3>
-              <div className="flex-1 h-px bg-gradient-to-r from-cyan-400/50 to-transparent" />
+              <div className="flex-1 h-px bg-linear-to-r from-cyan-400/50 to-transparent" />
             </div>
 
             <div ref={skillsRef} className="grid md:grid-cols-2 gap-4">
@@ -390,7 +390,7 @@ export default function AboutPage() {
                       initial={{ width: 0 }}
                       animate={skillsInView ? { width: `${skill.level}%` } : {}}
                       transition={{ duration: 1.2, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                      className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-400"
+                      className="h-full rounded-full bg-linear-to-r from-blue-600 to-cyan-400"
                       style={{ boxShadow: "0 0 8px rgba(0,200,255,0.6)" }}
                     />
                   </div>
@@ -399,7 +399,7 @@ export default function AboutPage() {
             </div>
           </motion.div>
 
-          <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent mb-16" />
+          <div className="h-px bg-linear-to-r from-transparent via-cyan-400/30 to-transparent mb-16" />
 
           {/* ── EXPERIENCE TIMELINE ── */}
           <motion.div
@@ -412,12 +412,12 @@ export default function AboutPage() {
             <div className="flex items-center gap-3 mb-8">
               <span className="text-cyan-400 text-lg">▣</span>
               <h3 className="font-mono text-sm tracking-[3px] text-cyan-400 uppercase">Experience Timeline</h3>
-              <div className="flex-1 h-px bg-gradient-to-r from-cyan-400/50 to-transparent" />
+              <div className="flex-1 h-px bg-linear-to-r from-cyan-400/50 to-transparent" />
             </div>
 
             <div className="relative pl-8">
               {/* Vertical line */}
-              <div className="absolute left-[7px] top-0 bottom-0 w-px bg-gradient-to-b from-cyan-400/60 to-cyan-400/10" />
+              <div className="absolute left-[7px] top-0 bottom-0 w-px bg-linear-to-b from-cyan-400/60 to-cyan-400/10" />
 
               {experiences.map((exp, i) => (
                 <motion.div
@@ -460,7 +460,7 @@ export default function AboutPage() {
             <div className="flex items-center gap-3 mb-6">
               <span className="text-cyan-400 text-lg">▶</span>
               <h3 className="font-mono text-sm tracking-[3px] text-cyan-400 uppercase">System Log</h3>
-              <div className="flex-1 h-px bg-gradient-to-r from-cyan-400/50 to-transparent" />
+              <div className="flex-1 h-px bg-linear-to-r from-cyan-400/50 to-transparent" />
             </div>
             <Terminal />
           </motion.div>
