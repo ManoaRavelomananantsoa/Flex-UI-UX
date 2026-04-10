@@ -2,8 +2,52 @@
 import { Navbar } from "@/components/Navbar";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Github, Linkedin, Send } from "lucide-react";
+import { useState } from "react";
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      // Create mailto link with form data
+      const subject = encodeURIComponent(`Contact from ${formData.name}`);
+      const body = encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      );
+      
+      // Open email client
+      window.location.href = `mailto:ravelomanantsoamanoa89@gmail.com?subject=${subject}&body=${body}`;
+      
+      setSubmitStatus('success');
+      // Reset form after 2 seconds
+      setTimeout(() => {
+        setFormData({ name: '', email: '', message: '' });
+        setSubmitStatus('idle');
+      }, 2000);
+    } catch (error) {
+      setSubmitStatus('error');
+      setTimeout(() => setSubmitStatus('idle'), 3000);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <main className="min-h-screen text-white selection:bg-cyan-500/30 overflow-hidden">
 
@@ -217,13 +261,17 @@ export default function ContactPage() {
                 SEND MESSAGE
               </h2>
 
-              <form className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                   <label className="neon-label block mb-2">Name</label>
                   <input
                     type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     className="neon-input w-full px-4 py-3 rounded-lg"
                     placeholder="Your name"
+                    required
                   />
                 </div>
 
@@ -231,27 +279,49 @@ export default function ContactPage() {
                   <label className="neon-label block mb-2">Email</label>
                   <input
                     type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     className="neon-input w-full px-4 py-3 rounded-lg"
                     placeholder="your.email@example.com"
+                    required
                   />
                 </div>
 
                 <div>
                   <label className="neon-label block mb-2">Message</label>
                   <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
                     rows={5}
                     className="neon-input w-full px-4 py-3 rounded-lg resize-none"
                     placeholder="Your message..."
+                    required
                   />
                 </div>
 
+                {/* Status Messages */}
+                {submitStatus === 'success' && (
+                  <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400 text-sm">
+                    ✓ Message sent successfully! Your email client should open.
+                  </div>
+                )}
+                
+                {submitStatus === 'error' && (
+                  <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+                    ✗ Error sending message. Please try again.
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  className="neon-btn w-full px-6 py-3 rounded-xl flex items-center justify-center gap-2 font-bold"
+                  disabled={isSubmitting}
+                  className="neon-btn w-full px-6 py-3 rounded-xl flex items-center justify-center gap-2 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ fontSize: "0.85rem" }}
                 >
                   <Send size={16} />
-                  SEND
+                  {isSubmitting ? 'SENDING...' : 'SEND'}
                 </button>
               </form>
             </motion.div>
