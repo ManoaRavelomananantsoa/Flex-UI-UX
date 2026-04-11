@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Github, Linkedin, Send } from "lucide-react";
 import { useState } from "react";
+import { sendContactEmail } from "@/app/actions/contact";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -26,21 +27,24 @@ export default function ContactPage() {
     setSubmitStatus('idle');
 
     try {
-      // Create mailto link with form data
-      const subject = encodeURIComponent(`Contact from ${formData.name}`);
-      const body = encodeURIComponent(
-        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-      );
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('message', formData.message);
+
+      const result = await sendContactEmail(formDataToSend);
       
-      // Open email client
-      window.location.href = `mailto:ravelomanantsoamanoa89@gmail.com?subject=${subject}&body=${body}`;
-      
-      setSubmitStatus('success');
-      // Reset form after 2 seconds
-      setTimeout(() => {
-        setFormData({ name: '', email: '', message: '' });
-        setSubmitStatus('idle');
-      }, 2000);
+      if (result.success) {
+        setSubmitStatus('success');
+        // Reset form after 2 seconds
+        setTimeout(() => {
+          setFormData({ name: '', email: '', message: '' });
+          setSubmitStatus('idle');
+        }, 2000);
+      } else {
+        setSubmitStatus('error');
+        setTimeout(() => setSubmitStatus('idle'), 3000);
+      }
     } catch (error) {
       setSubmitStatus('error');
       setTimeout(() => setSubmitStatus('idle'), 3000);
@@ -304,7 +308,7 @@ export default function ContactPage() {
                 {/* Status Messages */}
                 {submitStatus === 'success' && (
                   <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400 text-sm">
-                    ✓ Message sent successfully! Your email client should open.
+                    ✓ Message sent successfully! I'll get back to you soon.
                   </div>
                 )}
                 
