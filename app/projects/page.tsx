@@ -2,7 +2,7 @@
 import { Navbar } from "@/components/Navbar";
 import { motion, AnimatePresence } from "framer-motion";
 import { Github, ExternalLink, Code2, Database, Globe, Smartphone, ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;500&display=swap');
@@ -234,43 +234,52 @@ const STYLES = `
   }
 `;
 
-const projects = [
-  { 
-    title: "Electro-view", 
-    icon: <Globe size={16} />, 
-    image: "images/projects/Electro-view.png", 
-    index: "01",
-    description: "Graphical simulation application for voltage and current intensity"
-  },
-  { 
-    title: "Career Management", 
-    icon: <Code2 size={16} />, 
-    image: "images/projects/gestion-carriere.png", 
-    index: "02",
-    description: "Career management application with process tracking"
-  },
-  { 
-    title: "Tri-Fako", 
-    icon: <Database size={16} />, 
-    image: "images/projects/logo-trifako.png", 
-    index: "03",
-    description: "Mobile app for decentralized waste distribution"
-  },
-  { 
-    title: "Color Detector", 
-    icon: <Smartphone size={16} />, 
-    image: "images/projects/color-detector.png", 
-    index: "04",
-    description: "Real-time color detection via camera"
-  },
-];
+interface Project {
+  id: string;
+  title: string;
+  icon: string;
+  image: string;
+  index: string;
+  description: string;
+}
+
+const getIconComponent = (iconName: string) => {
+  const icons: Record<string, any> = {
+    Globe,
+    Code2,
+    Database,
+    Smartphone,
+    Github,
+    ExternalLink,
+  };
+  const Icon = icons[iconName] || Globe;
+  return <Icon size={16} />;
+};
 
 export default function ProjectsPage() {
+  const [projects, setProjects] = useState<Project[]>([]);
   const [rotation, setRotation] = useState(0);
   const [activeIdx, setActiveIdx] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  // Charger les projets depuis l'API
+  useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        const response = await fetch('/api/projects');
+        const data = await response.json();
+        setProjects(data);
+      } catch (error) {
+        console.error('Error loading projects:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProjects();
+  }, []);
   
   const count = projects.length;
-  const angleStep = 360 / count;
+  const angleStep = count > 0 ? 360 / count : 0;
   const radius = 300;
 
   const rotate = (dir: number) => {
@@ -282,6 +291,12 @@ export default function ProjectsPage() {
     <>
       <style>{STYLES}</style>
       <main className="min-h-screen bg-transparent text-white">
+        {loading ? (
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="text-cyan-400 text-xl">Loading projects...</div>
+          </div>
+        ) : (
+          <>
         <Navbar />
 
         <section className="pt-24 projects-layout">
@@ -369,7 +384,7 @@ export default function ProjectsPage() {
                       >
                         <span className="text-[9px] text-cyan-500 font-bold mb-1 block tracking-[0.3em]">ID-{p.index}</span>
                         <div className="flex items-center gap-2 mb-3">
-                          <span className="text-cyan-400">{p.icon}</span>
+                          <span className="text-cyan-400">{getIconComponent(p.icon)}</span>
                           <h3 className="text-xs font-bold tracking-widest leading-none text-white">{p.title}</h3>
                         </div>
                         <p className="text-[10px] text-zinc-400 leading-relaxed mb-3 max-w-[200px]">{p.description}</p>
@@ -413,6 +428,8 @@ export default function ProjectsPage() {
             </div>
           </div>
         </section>
+          </>
+        )}
       </main>
     </>
   );

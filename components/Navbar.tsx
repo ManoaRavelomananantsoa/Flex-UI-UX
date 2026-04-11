@@ -1,5 +1,5 @@
 "use client";
-import { Search } from "lucide-react";
+import { Search, Lock } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -110,6 +110,15 @@ export function Navbar() {
           <button className="p-2 text-zinc-400 hover:text-white transition-colors">
             <Search size={20} />
           </button>
+          
+          {/* Lien admin discret */}
+          <Link 
+            href="/admin" 
+            className="p-2 text-zinc-600 hover:text-cyan-400 transition-colors"
+            aria-label="Admin"
+          >
+            <Lock size={16} />
+          </Link>
           
           {/* Un petit bouton "Call to Action" discret */}
           <div className="h-8 w-px bg-zinc-800 mx-2 hidden sm:block" />
