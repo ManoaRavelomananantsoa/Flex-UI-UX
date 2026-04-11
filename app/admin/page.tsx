@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
-import { motion } from "framer-motion";
-import { Plus, Edit, Trash2, Github, ExternalLink, Code2, Database, Globe, Smartphone, Lock, LogOut, User, Image, FolderKanban, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Plus, Edit, Trash2, Github, ExternalLink, Code2, Database, Globe, Smartphone, Lock, LogOut, User, Image, FolderKanban, ArrowRight, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 
 type AdminSection = 'dashboard' | 'profile' | 'projects' | 'avatar';
 
@@ -15,6 +15,12 @@ interface Project {
   description: string;
 }
 
+interface Toast {
+  id: string;
+  type: 'success' | 'error' | 'info';
+  message: string;
+}
+
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
@@ -23,6 +29,15 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  const showToast = (type: 'success' | 'error' | 'info', message: string) => {
+    const id = Date.now().toString();
+    setToasts(prev => [...prev, { id, type, message }]);
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== id));
+    }, 3000);
+  };
 
   // Charger les projets depuis l'API
   const loadProjects = async () => {
@@ -47,10 +62,15 @@ export default function AdminPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     // Mot de passe simple pour l'admin (à améliorer avec NextAuth)
+    if (!password.trim()) {
+      showToast('error', 'Password is required');
+      return;
+    }
     if (password === "admin123") {
       setIsAuthenticated(true);
+      showToast('success', 'Welcome back, Admin!');
     } else {
-      alert("Mot de passe incorrect");
+      showToast('error', 'Incorrect password');
     }
   };
 
@@ -69,9 +89,10 @@ export default function AdminPage() {
       try {
         await fetch(`/api/projects/${id}`, { method: 'DELETE' });
         await loadProjects();
+        showToast('success', 'Project deleted successfully');
       } catch (error) {
         console.error('Error deleting project:', error);
-        alert('Erreur lors de la suppression du projet');
+        showToast('error', 'Failed to delete project');
       }
     }
   };
@@ -107,9 +128,10 @@ export default function AdminPage() {
       await loadProjects();
       setShowForm(false);
       setEditingProject(null);
+      showToast('success', 'Project saved successfully');
     } catch (error) {
       console.error('Error saving project:', error);
-      alert('Erreur lors de la sauvegarde du projet');
+      showToast('error', 'Failed to save project');
     }
   };
 
@@ -150,6 +172,32 @@ export default function AdminPage() {
               Access Admin
             </button>
           </form>
+        </div>
+
+        {/* Toast Container */}
+        <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+          <AnimatePresence>
+            {toasts.map((toast) => (
+              <motion.div
+                key={toast.id}
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 100 }}
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg ${
+                  toast.type === 'success' 
+                    ? 'bg-green-500/90 text-white' 
+                    : toast.type === 'error' 
+                    ? 'bg-red-500/90 text-white' 
+                    : 'bg-blue-500/90 text-white'
+                }`}
+              >
+                {toast.type === 'success' && <CheckCircle size={20} />}
+                {toast.type === 'error' && <XCircle size={20} />}
+                {toast.type === 'info' && <AlertCircle size={20} />}
+                <span className="text-sm font-medium">{toast.message}</span>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </main>
     );
@@ -224,7 +272,15 @@ export default function AdminPage() {
       animate={{ opacity: 1, y: 0 }}
       className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-8"
     >
-      <h2 className="text-2xl font-bold mb-6">Profile Information</h2>
+      <div className="flex items-center gap-4 mb-6">
+        <button
+          onClick={() => setCurrentSection('dashboard')}
+          className="p-2 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-cyan-400"
+        >
+          <ArrowRight size={20} className="rotate-180" />
+        </button>
+        <h2 className="text-2xl font-bold">Profile Information</h2>
+      </div>
       <form className="space-y-6">
         <div>
           <label className="block text-sm font-medium mb-2">Full Name</label>
@@ -274,7 +330,15 @@ export default function AdminPage() {
       animate={{ opacity: 1, y: 0 }}
       className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-8"
     >
-      <h2 className="text-2xl font-bold mb-6">Profile Picture</h2>
+      <div className="flex items-center gap-4 mb-6">
+        <button
+          onClick={() => setCurrentSection('dashboard')}
+          className="p-2 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-cyan-400"
+        >
+          <ArrowRight size={20} className="rotate-180" />
+        </button>
+        <h2 className="text-2xl font-bold">Profile Picture</h2>
+      </div>
       <div className="space-y-6">
         <div className="flex items-center gap-6">
           <div className="w-32 h-32 bg-zinc-800 rounded-full flex items-center justify-center overflow-hidden">
@@ -301,15 +365,15 @@ export default function AdminPage() {
                     const result = await response.json();
                     
                     if (result.success) {
-                      alert('Image uploaded successfully!');
+                      showToast('success', 'Image uploaded successfully!');
                       // Recharger l'image
                       window.location.reload();
                     } else {
-                      alert('Failed to upload image');
+                      showToast('error', 'Failed to upload image');
                     }
                   } catch (error) {
                     console.error('Error uploading image:', error);
-                    alert('Error uploading image');
+                    showToast('error', 'Error uploading image');
                   }
                 }
               }}
@@ -340,6 +404,15 @@ export default function AdminPage() {
       animate={{ opacity: 1, y: 0 }}
       className="space-y-6"
     >
+      <div className="flex items-center gap-4">
+        <button
+          onClick={() => setCurrentSection('dashboard')}
+          className="p-2 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-cyan-400"
+        >
+          <ArrowRight size={20} className="rotate-180" />
+        </button>
+        <h2 className="text-2xl font-bold">Projects Management</h2>
+      </div>
       {loading ? (
         <div className="text-center py-12">
           <div className="text-cyan-400">Loading projects...</div>
@@ -542,6 +615,32 @@ export default function AdminPage() {
           {currentSection === 'profile' && renderProfileSection()}
           {currentSection === 'avatar' && renderAvatarSection()}
           {currentSection === 'projects' && renderProjectsSection()}
+
+          {/* Toast Container */}
+          <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+            <AnimatePresence>
+              {toasts.map((toast) => (
+                <motion.div
+                  key={toast.id}
+                  initial={{ opacity: 0, x: 100 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 100 }}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg ${
+                    toast.type === 'success' 
+                      ? 'bg-green-500/90 text-white' 
+                      : toast.type === 'error' 
+                      ? 'bg-red-500/90 text-white' 
+                      : 'bg-blue-500/90 text-white'
+                  }`}
+                >
+                  {toast.type === 'success' && <CheckCircle size={20} />}
+                  {toast.type === 'error' && <XCircle size={20} />}
+                  {toast.type === 'info' && <AlertCircle size={20} />}
+                  <span className="text-sm font-medium">{toast.message}</span>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
 
         </div>
       </section>
