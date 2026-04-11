@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import nodemailer from "nodemailer";
+import { getContactEmailTemplate } from "@/utils/template-utils";
 
 // Schéma de validation
 const ContactSchema = z.object({
@@ -39,34 +40,11 @@ export async function sendContactEmail(formData: FormData) {
       from: `"${validatedData.name}" <${validatedData.email}>`,
       to: 'ravelomanantsoamanoa89@gmail.com',
       subject: `Portfolio Contact - ${validatedData.name}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0a0a0a; color: #fff;">
-          <div style="background: linear-gradient(135deg, #00e5ff, #0088ff); padding: 20px; text-align: center;">
-            <h1 style="margin: 0; color: #000; font-size: 24px; font-weight: bold;">
-              Portfolio Contact
-            </h1>
-          </div>
-          
-          <div style="padding: 30px; background: rgba(0, 0, 0, 0.8);">
-            <h2 style="color: #00e5ff; border-bottom: 2px solid #00e5ff; padding-bottom: 10px;">
-              Nouveau message
-            </h2>
-            
-            <div style="background: rgba(0, 229, 255, 0.1); padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid rgba(0, 229, 255, 0.3);">
-              <p style="margin: 10px 0;"><strong style="color: #00e5ff;">Nom:</strong> ${validatedData.name}</p>
-              <p style="margin: 10px 0;"><strong style="color: #00e5ff;">Email:</strong> ${validatedData.email}</p>
-              <p style="margin: 10px 0;"><strong style="color: #00e5ff;">Message:</strong></p>
-              <div style="background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 5px; margin-top: 10px;">
-                ${validatedData.message.replace(/\n/g, '<br>')}
-              </div>
-            </div>
-            
-            <p style="color: #666; font-size: 12px; margin-top: 30px;">
-              Envoyé depuis le formulaire de contact du portfolio
-            </p>
-          </div>
-        </div>
-      `,
+      html: getContactEmailTemplate({
+        name: validatedData.name,
+        email: validatedData.email,
+        message: validatedData.message
+      }),
     };
 
     // Envoyer l'email
