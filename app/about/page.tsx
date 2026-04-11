@@ -267,7 +267,7 @@ export default function AboutPage() {
                     className="w-full h-full rounded-full border-2 border-cyan-500/50 overflow-hidden"
                   >
                     <motion.img
-                      src="/images/me.png"
+                      src="/images/profile/me.png"
                       alt="Profile"
                       animate={{ scale: [1.02, 1.06, 1.02] }}
                       transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}

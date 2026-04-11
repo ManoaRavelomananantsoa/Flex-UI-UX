@@ -444,7 +444,7 @@ export function Hero() {
             <div className="absolute -inset-1.5 bg-cyan-500 rounded-full blur opacity-30 group-hover:opacity-70 transition duration-1000 shadow-[0_0_30px_rgba(6,182,212,0.5)]" />
             <div className="relative w-72 h-72 md:w-80 md:h-80 bg-zinc-900 rounded-full overflow-hidden border-2 border-cyan-500/30 shadow-2xl">
               <img
-                src="/images/me.png"
+                src="/images/profile/me.png"
                 alt="Portrait"
                 className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
               />
