@@ -277,12 +277,47 @@ export default function AdminPage() {
       <h2 className="text-2xl font-bold mb-6">Profile Picture</h2>
       <div className="space-y-6">
         <div className="flex items-center gap-6">
-          <div className="w-32 h-32 bg-zinc-800 rounded-full flex items-center justify-center">
-            <User size={48} className="text-zinc-600" />
+          <div className="w-32 h-32 bg-zinc-800 rounded-full flex items-center justify-center overflow-hidden">
+            <img src="/images/profile/me.png" alt="Profile" className="w-full h-full object-cover" />
           </div>
           <div>
             <p className="text-zinc-400 mb-4">Current profile picture</p>
-            <button className="px-4 py-2 bg-zinc-700 text-white rounded-lg hover:bg-zinc-600 transition-colors">
+            <input
+              type="file"
+              id="avatar-upload"
+              accept="image/*"
+              className="hidden"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const formData = new FormData();
+                  formData.append('file', file);
+                  
+                  try {
+                    const response = await fetch('/api/upload-avatar', {
+                      method: 'POST',
+                      body: formData,
+                    });
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                      alert('Image uploaded successfully!');
+                      // Recharger l'image
+                      window.location.reload();
+                    } else {
+                      alert('Failed to upload image');
+                    }
+                  } catch (error) {
+                    console.error('Error uploading image:', error);
+                    alert('Error uploading image');
+                  }
+                }
+              }}
+            />
+            <button
+              onClick={() => document.getElementById('avatar-upload')?.click()}
+              className="px-4 py-2 bg-zinc-700 text-white rounded-lg hover:bg-zinc-600 transition-colors"
+            >
               Upload New Picture
             </button>
           </div>
