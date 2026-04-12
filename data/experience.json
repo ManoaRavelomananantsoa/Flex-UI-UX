@@ -1,0 +1,11 @@
+[
+  {
+    "id": "1775979212239",
+    "company": "Luminess (Madagascar)",
+    "position": "Developer",
+    "startDate": "2026-01",
+    "endDate": "2026-03",
+    "description": "Full-Stack PEAN Developer | Luminess Madagascar\nDesigned and developed a Human Resources application focused on performance evaluation and talent management.\n\nTech Stack: PostgreSQL, Express.js, Angular, Node.js (PEAN).\n\nKey Contribution: Engineered an evaluation module to automate skill tracking and career development workflows.\n\nOutcome: Streamlined HR processes by implementing a robust relational database structure and an intuitive user interface.",
+    "current": false
+  }
+]

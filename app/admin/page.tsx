@@ -2,9 +2,9 @@
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit, Trash2, Github, ExternalLink, Code2, Database, Globe, Smartphone, Lock, LogOut, User, Image, FolderKanban, ArrowRight, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import { Plus, Edit, Trash2, Github, ExternalLink, Code2, Database, Globe, Smartphone, Lock, LogOut, User, Image, FolderKanban, ArrowRight, CheckCircle, XCircle, AlertCircle, Briefcase } from "lucide-react";
 
-type AdminSection = 'dashboard' | 'profile' | 'projects' | 'avatar';
+type AdminSection = 'dashboard' | 'profile' | 'projects' | 'avatar' | 'experience';
 
 interface Project {
   id: string;
@@ -13,6 +13,16 @@ interface Project {
   image: string;
   index: string;
   description: string;
+}
+
+interface Experience {
+  id: string;
+  company: string;
+  position: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  current: boolean;
 }
 
 interface Toast {
@@ -26,9 +36,12 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [currentSection, setCurrentSection] = useState<AdminSection>('dashboard');
   const [projects, setProjects] = useState<Project[]>([]);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
-  const [showForm, setShowForm] = useState(false);
+  const [editingExperience, setEditingExperience] = useState<Experience | null>(null);
+  const [showProjectForm, setShowProjectForm] = useState(false);
+  const [showExperienceForm, setShowExperienceForm] = useState(false);
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const showToast = (type: 'success' | 'error' | 'info', message: string) => {
@@ -57,6 +70,9 @@ export default function AdminPage() {
     if (isAuthenticated && currentSection === 'projects') {
       loadProjects();
     }
+    if (isAuthenticated && currentSection === 'experience') {
+      loadExperiences();
+    }
   }, [isAuthenticated, currentSection]);
 
   const handleLogin = (e: React.FormEvent) => {
@@ -76,12 +92,87 @@ export default function AdminPage() {
 
   const handleAddProject = () => {
     setEditingProject(null);
-    setShowForm(true);
+    setShowProjectForm(true);
   };
 
   const handleEditProject = (project: Project) => {
     setEditingProject(project);
-    setShowForm(true);
+    setShowProjectForm(true);
+  };
+
+  const handleAddExperience = () => {
+    setEditingExperience(null);
+    setShowExperienceForm(true);
+  };
+
+  const handleEditExperience = (experience: Experience) => {
+    setEditingExperience(experience);
+    setShowExperienceForm(true);
+  };
+
+  const handleDeleteExperience = async (id: string) => {
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette expérience ?")) {
+      try {
+        await fetch(`/api/experience/${id}`, { method: 'DELETE' });
+        await loadExperiences();
+        showToast('success', 'Experience deleted successfully');
+      } catch (error) {
+        console.error('Error deleting experience:', error);
+        showToast('error', 'Failed to delete experience');
+      }
+    }
+  };
+
+  const handleSaveExperience = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    
+    const newExperience: Experience = {
+      id: editingExperience?.id || Date.now().toString(),
+      company: formData.get("company") as string,
+      position: formData.get("position") as string,
+      startDate: formData.get("startDate") as string,
+      endDate: formData.get("endDate") as string,
+      description: formData.get("description") as string,
+      current: formData.get("current") === 'true',
+    };
+
+    try {
+      if (editingExperience) {
+        await fetch(`/api/experience/${editingExperience.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newExperience),
+        });
+      } else {
+        await fetch('/api/experience', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newExperience),
+        });
+      }
+      
+      await loadExperiences();
+      setShowExperienceForm(false);
+      setEditingExperience(null);
+      showToast('success', 'Experience saved successfully');
+    } catch (error) {
+      console.error('Error saving experience:', error);
+      showToast('error', 'Failed to save experience');
+    }
+  };
+
+  const loadExperiences = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/experience');
+      const data = await response.json();
+      setExperiences(data);
+    } catch (error) {
+      console.error('Error loading experiences:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeleteProject = async (id: string) => {
@@ -126,7 +217,7 @@ export default function AdminPage() {
       }
       
       await loadProjects();
-      setShowForm(false);
+      setShowProjectForm(false);
       setEditingProject(null);
       showToast('success', 'Project saved successfully');
     } catch (error) {
@@ -295,6 +386,22 @@ export default function AdminPage() {
           </div>
           <h3 className="text-xl font-bold mb-2">Projects</h3>
           <p className="text-zinc-400 text-sm">Add, edit, or remove portfolio projects</p>
+        </motion.button>
+
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => setCurrentSection('experience')}
+          className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-left hover:border-cyan-500/50 transition-all group"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center text-orange-400 group-hover:bg-orange-500/20 transition-colors">
+              <Briefcase size={24} />
+            </div>
+            <ArrowRight size={20} className="text-zinc-600 group-hover:text-cyan-400 transition-colors" />
+          </div>
+          <h3 className="text-xl font-bold mb-2">Experience</h3>
+          <p className="text-zinc-400 text-sm">Add, edit, or remove work experience</p>
         </motion.button>
       </div>
     </motion.div>
@@ -492,6 +599,67 @@ export default function AdminPage() {
     </motion.div>
   );
 
+  const renderExperienceSection = () => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6"
+    >
+      <div className="flex items-center gap-4">
+        <button
+          onClick={() => setCurrentSection('dashboard')}
+          className="p-2 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-cyan-400"
+        >
+          <ArrowRight size={20} className="rotate-180" />
+        </button>
+        <h2 className="text-2xl font-bold">Work Experience</h2>
+      </div>
+      <div className="grid gap-4">
+        {experiences.map((experience) => (
+          <motion.div
+            key={experience.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6"
+          >
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-xl font-bold text-white">{experience.position}</h3>
+                <p className="text-cyan-400 font-medium">{experience.company}</p>
+                <p className="text-zinc-400 text-sm mt-1">
+                  {experience.startDate} - {experience.current ? 'Present' : experience.endDate}
+                </p>
+                <p className="text-zinc-300 text-sm mt-3">{experience.description}</p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setEditingExperience(experience);
+                    setShowExperienceForm(true);
+                  }}
+                  className="p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-cyan-400"
+                >
+                  <Edit size={20} />
+                </button>
+                <button
+                  onClick={() => handleDeleteExperience(experience.id)}
+                  className="p-3 bg-zinc-800 rounded-lg hover:bg-red-500/20 hover:text-red-400 transition-colors"
+                >
+                  <Trash2 size={20} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+        {experiences.length === 0 && (
+          <div className="text-center py-12 text-zinc-400">
+            No experience added yet. Click "Add Experience" to add your work history.
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+
   return (
     <main className="min-h-screen text-white">
       <Navbar />
@@ -521,6 +689,7 @@ export default function AdminPage() {
                     {currentSection === 'profile' && 'Update your personal information'}
                     {currentSection === 'avatar' && 'Change your profile picture'}
                     {currentSection === 'projects' && 'Manage your portfolio projects'}
+                    {currentSection === 'experience' && 'Manage your work experience'}
                   </p>
                 </>
               )}
@@ -535,6 +704,15 @@ export default function AdminPage() {
                   Add Project
                 </button>
               )}
+              {currentSection === 'experience' && (
+                <button
+                  onClick={handleAddExperience}
+                  className="px-6 py-3 bg-cyan-500 text-black font-bold rounded-lg hover:bg-cyan-400 transition-colors flex items-center gap-2"
+                >
+                  <Plus size={20} />
+                  Add Experience
+                </button>
+              )}
               <button
                 onClick={() => setIsAuthenticated(false)}
                 className="px-6 py-3 bg-zinc-700 text-white font-bold rounded-lg hover:bg-zinc-600 transition-colors flex items-center gap-2"
@@ -546,7 +724,7 @@ export default function AdminPage() {
           </div>
 
           {/* Form Modal */}
-          {showForm && currentSection === 'projects' && (
+          {showProjectForm && currentSection === 'projects' && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -625,7 +803,7 @@ export default function AdminPage() {
                     <button
                       type="button"
                       onClick={() => {
-                        setShowForm(false);
+                        setShowProjectForm(false);
                         setEditingProject(null);
                       }}
                       className="px-6 py-3 bg-zinc-700 text-white font-bold rounded-lg hover:bg-zinc-600 transition-colors"
@@ -644,11 +822,119 @@ export default function AdminPage() {
             </motion.div>
           )}
 
+          {/* Experience Form Modal */}
+          {showExperienceForm && currentSection === 'experience' && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            >
+              <motion.div
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 max-w-2xl w-full"
+              >
+                <h2 className="text-2xl font-bold mb-6">
+                  {editingExperience ? "Edit Experience" : "Add New Experience"}
+                </h2>
+                <form onSubmit={handleSaveExperience} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Company</label>
+                    <input
+                      name="company"
+                      defaultValue={editingExperience?.company}
+                      placeholder="Company Name"
+                      className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Position</label>
+                    <input
+                      name="position"
+                      defaultValue={editingExperience?.position}
+                      placeholder="Job Title"
+                      className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Start Date</label>
+                      <input
+                        name="startDate"
+                        type="month"
+                        defaultValue={editingExperience?.startDate}
+                        className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">End Date</label>
+                      <input
+                        name="endDate"
+                        type="month"
+                        defaultValue={editingExperience?.endDate}
+                        disabled={editingExperience?.current}
+                        className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none disabled:opacity-50"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      name="current"
+                      id="current"
+                      defaultChecked={editingExperience?.current}
+                      className="w-4 h-4 bg-zinc-800 border-zinc-700 rounded text-cyan-500 focus:ring-cyan-500"
+                    />
+                    <label htmlFor="current" className="text-sm">Currently working here</label>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Description</label>
+                    <textarea
+                      name="description"
+                      defaultValue={editingExperience?.description}
+                      rows={3}
+                      placeholder="Describe your role and achievements"
+                      className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none resize-none"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="flex gap-4 justify-end mt-6">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowExperienceForm(false);
+                        setEditingExperience(null);
+                      }}
+                      className="px-6 py-3 bg-zinc-700 text-white font-bold rounded-lg hover:bg-zinc-600 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-6 py-3 bg-cyan-500 text-black font-bold rounded-lg hover:bg-cyan-400 transition-colors"
+                    >
+                      {editingExperience ? "Update" : "Create"}
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
+            </motion.div>
+          )}
+
           {/* Section Content */}
           {currentSection === 'dashboard' && renderDashboard()}
           {currentSection === 'profile' && renderProfileSection()}
           {currentSection === 'avatar' && renderAvatarSection()}
           {currentSection === 'projects' && renderProjectsSection()}
+          {currentSection === 'experience' && renderExperienceSection()}
 
           {/* Toast Container */}
           <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">

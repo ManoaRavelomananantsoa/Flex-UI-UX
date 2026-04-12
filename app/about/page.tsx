@@ -12,29 +12,15 @@ const skills = [
   { name: "DevOps & CI/CD", level: 75 },
 ];
 
-const experiences = [
-  {
-    year: "2023 - Present",
-    role: "Senior Full-Stack Developer",
-    company: "Tech Solutions Inc.",
-    description:
-      "Leading development of scalable web applications using React, Node.js, and cloud technologies.",
-  },
-  {
-    year: "2021 - 2023",
-    role: "Full-Stack Developer",
-    company: "Digital Agency Pro",
-    description:
-      "Built responsive web applications and e-commerce platforms for diverse clients.",
-  },
-  {
-    year: "2019 - 2021",
-    role: "Frontend Developer",
-    company: "Startup Hub",
-    description:
-      "Developed interactive user interfaces and implemented modern design systems.",
-  },
-];
+interface Experience {
+  id: string;
+  company: string;
+  position: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  current: boolean;
+}
 
 const stats = [
   { value: 5, suffix: "+", label: "ANNÉES EXP." },
@@ -137,6 +123,21 @@ function Terminal() {
 export default function AboutPage() {
   const skillsRef = useRef(null);
   const skillsInView = useInView(skillsRef, { once: true, margin: "-80px" });
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+
+  // Charger les expériences depuis l'API
+  useEffect(() => {
+    const loadExperiences = async () => {
+      try {
+        const response = await fetch('/api/experience');
+        const data = await response.json();
+        setExperiences(data);
+      } catch (error) {
+        console.error('Error loading experiences:', error);
+      }
+    };
+    loadExperiences();
+  }, []);
 
   return (
     <main className="min-h-screen text-white selection:bg-cyan-500/30 overflow-hidden">
@@ -441,8 +442,10 @@ export default function AboutPage() {
                     />
                   </motion.div>
 
-                  <p className="font-mono text-xs text-cyan-400 tracking-widest mb-1">{exp.year}</p>
-                  <h4 className="text-xl font-bold text-[#e0f2ff] mb-0.5">{exp.role}</h4>
+                  <p className="font-mono text-xs text-cyan-400 tracking-widest mb-1">
+                    {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
+                  </p>
+                  <h4 className="text-xl font-bold text-[#e0f2ff] mb-0.5">{exp.position}</h4>
                   <p className="text-sm text-cyan-400/40 mb-2">{exp.company}</p>
                   <p className="text-cyan-100/60 text-sm leading-relaxed">{exp.description}</p>
                 </motion.div>
