@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit, Trash2, Github, ExternalLink, Code2, Database, Globe, Smartphone, Lock, LogOut, User, Image, FolderKanban, ArrowRight, CheckCircle, XCircle, AlertCircle, Briefcase } from "lucide-react";
+import { Plus, Edit, Trash2, Github, ExternalLink, Code2, Database, Globe, Smartphone, Lock, LogOut, User, Image, FolderKanban, ArrowRight, CheckCircle, XCircle, AlertCircle, Briefcase, Eye, EyeOff } from "lucide-react";
 
 type AdminSection = 'dashboard' | 'profile' | 'projects' | 'avatar' | 'experience';
 
@@ -52,6 +52,7 @@ const defaultProfile: Profile = {
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [currentSection, setCurrentSection] = useState<AdminSection>('dashboard');
   const [projects, setProjects] = useState<Project[]>([]);
   const [experiences, setExperiences] = useState<Experience[]>([]);
@@ -144,6 +145,7 @@ export default function AdminPage() {
       showToast('error', 'Password is required');
       return;
     }
+    // if (password === "Manoaman6061#") {
     if (password === "admin123") {
       setIsAuthenticated(true);
       showToast('success', 'Welcome back, Admin!');
@@ -311,13 +313,23 @@ export default function AdminPage() {
             <p className="text-zinc-400">Enter password to manage your portfolio</p>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                className="w-full px-4 py-3 pr-12 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-cyan-400 transition-colors"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
             <button
               type="submit"
               className="w-full px-6 py-3 bg-cyan-500 text-black font-bold rounded-lg hover:bg-cyan-400 transition-colors"
@@ -396,10 +408,7 @@ export default function AdminPage() {
       animate={{ opacity: 1, y: 0 }}
       className="space-y-8"
     >
-      <div>
-        <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
-        <p className="text-zinc-400">Manage your portfolio content</p>
-      </div>
+      
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <motion.button
