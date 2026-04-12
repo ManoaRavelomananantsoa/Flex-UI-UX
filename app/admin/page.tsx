@@ -443,6 +443,7 @@ export default function AdminPage() {
         </motion.button>
 
         {/* Profile Picture */}
+        {/* Profile Picture */}
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -474,6 +475,7 @@ export default function AdminPage() {
           </p>
         </motion.button>
 
+        {/* Projects */}
         {/* Projects */}
         <motion.button
           whileHover={{ scale: 1.02 }}
@@ -507,6 +509,7 @@ export default function AdminPage() {
         </motion.button>
 
         {/* Experience */}
+        {/* Experience */}
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -537,6 +540,7 @@ export default function AdminPage() {
             Add, edit, or remove work experience
           </p>
         </motion.button>
+
 
       </div>
     </motion.div>
@@ -742,7 +746,7 @@ export default function AdminPage() {
     </motion.div>
   );
 
-    const renderAvatarSection = () => (
+  const renderAvatarSection = () => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -834,6 +838,7 @@ export default function AdminPage() {
               }}
             />
 
+
             <button
               onClick={() => document.getElementById('avatar-upload')?.click()}
               className="flex items-center gap-2 px-5 py-2.5 rounded-lg
@@ -878,7 +883,6 @@ export default function AdminPage() {
               bg-linear-to-r from-transparent via-cyan-400/30 to-transparent" />
           </div>
         </div>
-
       </div>
     </motion.div>
   );
@@ -906,6 +910,7 @@ export default function AdminPage() {
           Projects Management
         </h2>
       </div>
+
 
       {loading ? (
         <div className="text-center py-12">
@@ -983,22 +988,22 @@ export default function AdminPage() {
   );
 
   const renderExperienceSection = () => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="space-y-5"
-  >
-    {/* Header */}
-    <div className="flex items-center gap-4">
-      <button
-        onClick={() => setCurrentSection('dashboard')}
-        className="w-9 h-9 flex items-center justify-center rounded-lg
-          bg-black/50 border border-cyan-400/40 text-cyan-400
-          backdrop-blur-md
-          hover:border-cyan-400/80 hover:shadow-[0_0_16px_rgba(0,255,255,0.3)]
-          transition-all duration-200"
-      >
-        <ArrowRight size={16} className="rotate-180" />
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-5"
+    >
+      {/* Header */}
+      <div className="flex items-center gap-4">
+        <button
+          onClick={() => setCurrentSection('dashboard')}
+          className="w-9 h-9 flex items-center justify-center rounded-lg
+            bg-black/50 border border-cyan-400/40 text-cyan-400
+            backdrop-blur-md
+            hover:border-cyan-400/80 hover:shadow-[0_0_16px_rgba(0,255,255,0.3)]
+            transition-all duration-200"
+        >
+          <ArrowRight size={16} className="rotate-180" />
       </button>
       <h2 className="text-2xl font-bold text-white">Work Experience</h2>
     </div>
@@ -1077,6 +1082,7 @@ export default function AdminPage() {
           </div>
         </motion.div>
       ))}
+
 
       {experiences.length === 0 && (
         <div className="relative rounded-xl overflow-hidden

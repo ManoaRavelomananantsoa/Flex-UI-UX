@@ -7,7 +7,9 @@ const items = [
   {
     title: "Frontend Expertise",
     description: "Responsive interfaces with Angular (RxJS/Signals) and Next.js.",
-    backDescription: "Angular, Next.js, TypeScript, TailwindCSS",
+    backTitle: "Frontend Dev",
+    backDesc: "Building pixel-perfect, reactive UIs with modern frameworks — real-time data streams with RxJS, SSR/ISR with Next.js, and type-safe codebases throughout.",
+    backTechs: ["Angular", "Next.js", "TypeScript", "TailwindCSS", "RxJS"],
     icon: <Layout size={24} color="#22d3ee" />,
     spanTwo: true,
     color: "#083344",
@@ -15,7 +17,9 @@ const items = [
   {
     title: "Full-Stack",
     description: "Robust MEAN & PEAN architectures.",
-    backDescription: "Node.js, Express, MongoDB, PostgreSQL",
+    backTitle: "Backend Systems",
+    backDesc: "REST & GraphQL APIs with Node/Express, scalable DB schemas, JWT auth, and clean layered architecture from route to repository.",
+    backTechs: ["Node.js", "Express", "MongoDB", "PostgreSQL"],
     icon: <Server size={24} color="#34d399" />,
     spanTwo: false,
     color: "#064e3b",
@@ -23,7 +27,9 @@ const items = [
   {
     title: "Data Master",
     description: "SQL & NoSQL (Postgres / Mongo).",
-    backDescription: "MongoDB, PostgreSQL, Prisma, Redis",
+    backTitle: "Data Layer",
+    backDesc: "Schema design, query optimization, migrations with Prisma, and caching strategies with Redis for high-throughput applications.",
+    backTechs: ["MongoDB", "PostgreSQL", "Prisma", "Redis"],
     icon: <Database size={24} color="#fb923c" />,
     spanTwo: false,
     color: "#7c2d12",
@@ -31,7 +37,9 @@ const items = [
   {
     title: "Clean Code",
     description: "SOLID & Design Patterns for scalability.",
-    backDescription: "SOLID, Clean Architecture, Repository Pattern",
+    backTitle: "Architecture",
+    backDesc: "Applying SOLID principles, Repository and Strategy patterns to keep codebases maintainable, testable, and ready to scale without rewrites.",
+    backTechs: ["SOLID", "Clean Arch", "Repository", "DI", "Design Patterns"],
     icon: <Code2 size={24} color="#a78bfa" />,
     spanTwo: true,
     color: "#4c1d95",
@@ -131,16 +139,32 @@ export function BentoGrid() {
                     </div>
 
                     {/* ── FACE ARRIÈRE ── */}
-                    <div
-                      className="bento-face bento-back"
-                      style={{ backgroundColor: item.color }}
-                    >
-                      <h3 className="bento-back-title">Tech Stack</h3>
+                    {/* ── FACE ARRIÈRE ── */}
+                    <div className="bento-face bento-back">
+
+                      {/* Header label */}
+                      <div className="bento-back-header">
+                        <div className="bento-back-dot" />
+                        <span className="bento-back-label">Tech Stack</span>
+                      </div>
+
+                      {/* Titre */}
+                      <h3 className="bento-back-title">{item.backTitle}</h3>
+
+                      {/* Description */}
+                      <p className="bento-back-desc">{item.backDesc}</p>
+
+                      {/* Divider */}
+                      <div className="bento-back-divider" />
+
+                      {/* Tags */}
+                      <p className="bento-back-stack-label">Technologies</p>
                       <div className="bento-tags">
-                        {item.backDescription.split(", ").map((tech, idx) => (
+                        {item.backTechs.map((tech, idx) => (
                           <span key={idx} className="bento-tag">{tech}</span>
                         ))}
                       </div>
+
                     </div>
 
                   </div>
