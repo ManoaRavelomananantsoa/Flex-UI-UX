@@ -31,6 +31,24 @@ interface Toast {
   message: string;
 }
 
+interface Profile {
+  fullName: string;
+  email: string;
+  phone: string;
+  bio: string;
+  title: string;
+  location: string;
+}
+
+const defaultProfile: Profile = {
+  fullName: "Manoa Ravelomanantsoa",
+  email: "ravelomanantsoamanoa89@gmail.com",
+  phone: "+261 34 00 000 00",
+  bio: "Passionate Full-Stack Developer specializing in modern web technologies. I create elegant, performant, and user-centric digital experiences.",
+  title: "Full-Stack Developer",
+  location: "Madagascar"
+};
+
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
@@ -43,6 +61,13 @@ export default function AdminPage() {
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [showExperienceForm, setShowExperienceForm] = useState(false);
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [profile, setProfile] = useState<Profile>(defaultProfile);
+  const [formProfile, setFormProfile] = useState<Profile>(defaultProfile);
+
+  // Synchroniser le formulaire quand le profil est chargé
+  useEffect(() => {
+    setFormProfile(profile);
+  }, [profile]);
 
   const showToast = (type: 'success' | 'error' | 'info', message: string) => {
     const id = Date.now().toString();
@@ -66,12 +91,49 @@ export default function AdminPage() {
     }
   };
 
+  // Charger le profil depuis l'API
+  const loadProfile = async () => {
+    try {
+      const response = await fetch('/api/profile');
+      const data = await response.json();
+      setProfile(data);
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
+  };
+
+  // Sauvegarder le profil via l'API
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formProfile),
+      });
+      setProfile(formProfile);
+      showToast('success', 'Profile saved successfully');
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      showToast('error', 'Failed to save profile');
+    }
+  };
+
+  // Mettre à jour un champ du formulaire
+  const updateFormField = (field: keyof Profile, value: string) => {
+    setFormProfile(prev => ({ ...prev, [field]: value }));
+  };
+
   useEffect(() => {
     if (isAuthenticated && currentSection === 'projects') {
       loadProjects();
     }
     if (isAuthenticated && currentSection === 'experience') {
       loadExperiences();
+    }
+    if (isAuthenticated && currentSection === 'profile') {
+      loadProfile();
     }
   }, [isAuthenticated, currentSection]);
 
@@ -422,28 +484,55 @@ export default function AdminPage() {
         </button>
         <h2 className="text-2xl font-bold">Profile Information</h2>
       </div>
-      <form className="space-y-6">
+      <form onSubmit={handleSaveProfile} className="space-y-6">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Full Name</label>
+            <input
+              type="text"
+              value={formProfile.fullName}
+              onChange={(e) => updateFormField('fullName', e.target.value)}
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Title / Role</label>
+            <input
+              type="text"
+              value={formProfile.title}
+              onChange={(e) => updateFormField('title', e.target.value)}
+              placeholder="e.g. Full-Stack Developer"
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Email</label>
+            <input
+              type="email"
+              value={formProfile.email}
+              onChange={(e) => updateFormField('email', e.target.value)}
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Phone</label>
+            <input
+              type="tel"
+              value={formProfile.phone}
+              onChange={(e) => updateFormField('phone', e.target.value)}
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+            />
+          </div>
+        </div>
         <div>
-          <label className="block text-sm font-medium mb-2">Full Name</label>
+          <label className="block text-sm font-medium mb-2">Location</label>
           <input
             type="text"
-            defaultValue="Manoa Ravelomanantsoa"
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-2">Email</label>
-          <input
-            type="email"
-            defaultValue="ravelomanantsoamanoa89@gmail.com"
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-2">Phone</label>
-          <input
-            type="tel"
-            defaultValue="+261 34 35 894 73"
+            value={formProfile.location}
+            onChange={(e) => updateFormField('location', e.target.value)}
+            placeholder="e.g. Madagascar"
             className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
           />
         </div>
@@ -451,7 +540,8 @@ export default function AdminPage() {
           <label className="block text-sm font-medium mb-2">Bio</label>
           <textarea
             rows={4}
-            defaultValue="Full-stack developer specializing in modern web technologies and clean architecture."
+            value={formProfile.bio}
+            onChange={(e) => updateFormField('bio', e.target.value)}
             className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none resize-none"
           />
         </div>

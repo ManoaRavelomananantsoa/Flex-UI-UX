@@ -4,12 +4,12 @@ import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 const skills = [
-  { name: "React & Next.js", level: 95 },
-  { name: "TypeScript", level: 90 },
-  { name: "Node.js & Express", level: 88 },
-  { name: "UI/UX Design", level: 85 },
-  { name: "PostgreSQL & MongoDB", level: 82 },
-  { name: "DevOps & CI/CD", level: 75 },
+  { name: "React & Next.js", level: 55 },
+  { name: "TypeScript", level: 60 },
+  { name: "Node.js & Express", level: 45 },
+  { name: "UI/UX Design", level: 45 },
+  { name: "PostgreSQL & MongoDB", level: 35 },
+  { name: "DevOps & CI/CD", level: 5 },
 ];
 
 interface Experience {
@@ -22,16 +22,28 @@ interface Experience {
   current: boolean;
 }
 
+interface Profile {
+  fullName: string;
+  email: string;
+  phone: string;
+  bio: string;
+  title: string;
+  location: string;
+}
+
+const defaultProfile: Profile = {
+  fullName: "Manoa Ravelomanantsoa",
+  email: "Ravelomanantsoamanoa89@gmail.com",
+  phone: "+261 34 35 894 73",
+  bio: "Passionate Full-Stack Developer specializing in modern web technologies. I create elegant, performant, and user-centric digital experiences.",
+  title: " Developer junior",
+  location: "Madagascar"
+};
+
 const stats = [
   { value: 3, suffix: "+", label: "ANNÉES EXP." },
-  { value: 2, suffix: "+", label: "PROJETS LIVRÉS" },
-  { value: 3, suffix: "+", label: "CLIENTS SATISFAITS" },
-];
-
-const terminalLines = [
-  { cmd: "whoami", out: "→ Developer | Designer | Problem Solver" },
-  { cmd: "cat skills.json", out: '→ { react, ts, node, design, devops... }' },
-  { cmd: "git log --oneline", out: "→ 5+ years of commits & counting 🚀" },
+  { value: 0, suffix: "+", label: "PROJETS LIVRÉS" },
+  { value: 0, suffix: "+", label: "CLIENTS SATISFAITS" },
 ];
 
 /* ── Animated counter ── */
@@ -60,16 +72,17 @@ function AnimatedCounter({ target, suffix }: { target: number; suffix: string })
 }
 
 /* ── Terminal typing effect ── */
-function Terminal() {
+function Terminal({ lines }: { lines: { cmd: string; out: string }[] }) {
   const [cmdText, setCmdText] = useState("");
   const [outText, setOutText] = useState("");
   const [showOut, setShowOut] = useState(false);
   const indexRef = useRef(0);
 
   useEffect(() => {
+    if (lines.length === 0) return;
     let timeout: ReturnType<typeof setTimeout>;
     function typeNext() {
-      const { cmd, out } = terminalLines[indexRef.current % terminalLines.length];
+      const { cmd, out } = lines[indexRef.current % lines.length];
       indexRef.current++;
       setCmdText("");
       setOutText("");
@@ -90,7 +103,7 @@ function Terminal() {
     }
     timeout = setTimeout(typeNext, 800);
     return () => clearTimeout(timeout);
-  }, []);
+  }, [lines]);
 
   return (
     <div className="relative bg-[#00050f]/90 border border-cyan-500/25 rounded-xl p-5 font-mono text-sm overflow-hidden">
@@ -124,11 +137,10 @@ export default function AboutPage() {
   const skillsRef = useRef(null);
   const skillsInView = useInView(skillsRef, { once: true, margin: "-80px" });
   const [experiences, setExperiences] = useState<Experience[]>([]);
-  const [mounted, setMounted] = useState(false);
+  const [profile, setProfile] = useState<Profile>(defaultProfile);
 
-  // Charger les expériences depuis l'API
+  // Charger les expériences et le profil depuis l'API
   useEffect(() => {
-    setMounted(true);
     const loadExperiences = async () => {
       try {
         const response = await fetch('/api/experience');
@@ -138,7 +150,19 @@ export default function AboutPage() {
         console.error('Error loading experiences:', error);
       }
     };
+    
+    const loadProfile = async () => {
+      try {
+        const response = await fetch('/api/profile');
+        const data = await response.json();
+        setProfile(data);
+      } catch (error) {
+        console.error('Error loading profile:', error);
+      }
+    };
+    
     loadExperiences();
+    loadProfile();
   }, []);
 
   return (
@@ -289,17 +313,18 @@ export default function AboutPage() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="flex flex-col justify-center"
             >
-              <h2 className="text-3xl font-bold mb-5 text-[#e0f2ff] leading-snug">
-                Full-Stack Developer<br />& UI Designer
+              <h2 className="text-3xl font-bold mb-2 text-[#e0f2ff] leading-snug">
+                {profile.fullName}
               </h2>
+              <p className="text-cyan-400 text-lg mb-5">{profile.title}</p>
               <p className="text-cyan-100/60 leading-relaxed mb-4">
-                Passionné par la création d'expériences numériques belles, fonctionnelles et mémorables. Plus de 5 ans d'expérience dans le développement web moderne.
+                {profile.bio}
               </p>
               <p className="text-cyan-100/60 leading-relaxed mb-8">
-                Quand je ne code pas, j'explore de nouveaux design trends, contribue à l'open-source ou esquisse de nouvelles idées autour d'un café.
+                 {profile.location} •  {profile.email} •  {profile.phone}
               </p>
               <div className="flex flex-wrap gap-3">
-                {["⚡ Clean Code", "◈ Creative Design", "◇ Passion Driven", "▣ Open Source"].map((tag, i) => (
+                {[" Clean Code", "◈ Creative Design", "◇ Passion Driven", "▣ Open Source"].map((tag, i) => (
                   <motion.span
                     key={i}
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -450,7 +475,13 @@ export default function AboutPage() {
               <h3 className="font-mono text-sm tracking-[3px] text-cyan-400 uppercase">System Log</h3>
               <div className="flex-1 h-px bg-linear-to-r from-cyan-400/50 to-transparent" />
             </div>
-            <Terminal />
+            <Terminal 
+              lines={[
+                { cmd: "whoami", out: `→ ${profile.fullName} | ${profile.title}` },
+                { cmd: "cat about.txt", out: `→ ${profile.bio.slice(0, 60)}...` },
+                { cmd: "location", out: `→ ${profile.location}` },
+              ]}
+            />
           </motion.div>
 
         </div>
@@ -461,12 +492,6 @@ export default function AboutPage() {
         @keyframes gridMove {
           0%   { background-position: 0 0; }
           100% { background-position: 60px 60px; }
-        }
-        @keyframes floatUp {
-          0%   { transform: translateY(100vh); opacity: 0; }
-          10%  { opacity: 1; }
-          90%  { opacity: 0.6; }
-          100% { transform: translateY(-20px); opacity: 0; }
         }
         @keyframes shimmer {
           to { background-position: 200% center; }
