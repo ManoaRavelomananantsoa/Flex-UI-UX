@@ -1,9 +1,15 @@
 "use client";
 import { Navbar } from "@/components/Navbar";
-import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Github, Linkedin, Send } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mail, Phone, MapPin, Github, Linkedin, Send, AlertCircle, CheckCircle, X } from "lucide-react";
 import { useState } from "react";
 import { sendContactEmail } from "@/app/actions/contact";
+
+interface Toast {
+  id: number;
+  type: 'success' | 'error' | 'warning';
+  message: string;
+}
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -13,6 +19,15 @@ export default function ContactPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  const showToast = (type: 'success' | 'error' | 'warning', message: string) => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, type, message }]);
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== id));
+    }, 4000);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -23,6 +38,23 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validation côté client
+    if (formData.name.length < 2) {
+      showToast('warning', 'Le nom doit contenir au moins 2 caractères');
+      return;
+    }
+
+    if (!formData.email.includes('@') || !formData.email.includes('.')) {
+      showToast('warning', 'Veuillez entrer une adresse email valide');
+      return;
+    }
+
+    if (formData.message.length < 10) {
+      showToast('warning', 'Le message doit contenir au moins 10 caractères');
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
@@ -33,8 +65,9 @@ export default function ContactPage() {
       formDataToSend.append('message', formData.message);
 
       const result = await sendContactEmail(formDataToSend);
-      
+
       if (result.success) {
+        showToast('success', 'Message envoyé avec succès !');
         setSubmitStatus('success');
         // Reset form after 2 seconds
         setTimeout(() => {
@@ -42,10 +75,12 @@ export default function ContactPage() {
           setSubmitStatus('idle');
         }, 2000);
       } else {
+        showToast('error', result.message || 'Erreur lors de l\'envoi du message');
         setSubmitStatus('error');
         setTimeout(() => setSubmitStatus('idle'), 3000);
       }
     } catch (error) {
+      showToast('error', 'Erreur lors de l\'envoi du message');
       setSubmitStatus('error');
       setTimeout(() => setSubmitStatus('idle'), 3000);
     } finally {
@@ -303,6 +338,11 @@ export default function ContactPage() {
                     placeholder="Your message..."
                     required
                   />
+                  <div className="flex justify-between items-center mt-2">
+                    <span className={`text-xs ${formData.message.length < 10 ? 'text-yellow-400' : 'text-green-400'}`}>
+                      {formData.message.length < 10 ? `Minimum 10 caractères (${formData.message.length}/10)` : `${formData.message.length} caractères`}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Status Messages */}
@@ -421,6 +461,32 @@ export default function ContactPage() {
 
         </div>
       </section>
+
+      {/* Toast Notifications */}
+      <div className="fixed top-4 right-4 z-50 flex flex-col gap-2">
+        <AnimatePresence>
+          {toasts.map((toast) => (
+            <motion.div
+              key={toast.id}
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 100 }}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg ${
+                toast.type === 'success'
+                  ? 'bg-green-500/90 backdrop-blur-sm border border-green-400/30'
+                  : toast.type === 'error'
+                  ? 'bg-red-500/90 backdrop-blur-sm border border-red-400/30'
+                  : 'bg-yellow-500/90 backdrop-blur-sm border border-yellow-400/30'
+              }`}
+            >
+              {toast.type === 'success' && <CheckCircle className="w-5 h-5 text-white" />}
+              {toast.type === 'error' && <X className="w-5 h-5 text-white" />}
+              {toast.type === 'warning' && <AlertCircle className="w-5 h-5 text-white" />}
+              <span className="text-white font-medium text-sm">{toast.message}</span>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
     </main>
   );
 }
