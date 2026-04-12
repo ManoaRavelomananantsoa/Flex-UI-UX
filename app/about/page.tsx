@@ -23,9 +23,9 @@ interface Experience {
 }
 
 const stats = [
-  { value: 5, suffix: "+", label: "ANNÉES EXP." },
-  { value: 40, suffix: "+", label: "PROJETS LIVRÉS" },
-  { value: 20, suffix: "+", label: "CLIENTS SATISFAITS" },
+  { value: 3, suffix: "+", label: "ANNÉES EXP." },
+  { value: 2, suffix: "+", label: "PROJETS LIVRÉS" },
+  { value: 3, suffix: "+", label: "CLIENTS SATISFAITS" },
 ];
 
 const terminalLines = [
@@ -124,9 +124,11 @@ export default function AboutPage() {
   const skillsRef = useRef(null);
   const skillsInView = useInView(skillsRef, { once: true, margin: "-80px" });
   const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [mounted, setMounted] = useState(false);
 
   // Charger les expériences depuis l'API
   useEffect(() => {
+    setMounted(true);
     const loadExperiences = async () => {
       try {
         const response = await fetch('/api/experience');
@@ -143,23 +145,6 @@ export default function AboutPage() {
     <main className="min-h-screen text-white selection:bg-cyan-500/30 overflow-hidden">
       <Navbar />
 
-
-      {/* ── Floating particles ── */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        {Array.from({ length: 30 }).map((_, i) => (
-          <span
-            key={i}
-            className="absolute rounded-full opacity-0"
-            style={{
-              width: `${Math.random() * 3 + 1}px`,
-              height: `${Math.random() * 3 + 1}px`,
-              left: `${Math.random() * 100}%`,
-              background: `hsl(${Math.random() * 40 + 200}, 100%, 70%)`,
-              animation: `floatUp ${Math.random() * 12 + 8}s linear ${Math.random() * 8}s infinite`,
-            }}
-          />
-        ))}
-      </div>
 
       <section className="relative z-10 pt-32 pb-20 px-4">
         <div className="container mx-auto max-w-5xl">

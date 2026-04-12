@@ -286,13 +286,13 @@ export default function AdminPage() {
               >
                 {/* Ligne lumineuse en haut */}
                 <span className={`absolute top-0 left-4 right-4 h-px rounded-full opacity-60
-                  ${toast.type === 'success' ? 'bg-gradient-to-r from-transparent via-emerald-400 to-transparent'
-                  : toast.type === 'error'   ? 'bg-gradient-to-r from-transparent via-rose-400 to-transparent'
-                  :                            'bg-gradient-to-r from-transparent via-sky-400 to-transparent'}`}
+                  ${toast.type === 'success' ? 'bg-linear-to-r from-transparent via-emerald-400 to-transparent'
+                  : toast.type === 'error'   ? 'bg-linear-to-r from-transparent via-rose-400 to-transparent'
+                  :                            'bg-linear-to-r from-transparent via-sky-400 to-transparent'}`}
                 />
 
                 {/* Icône */}
-                <div className={`flex items-center justify-center w-7 h-7 rounded-lg flex-shrink-0
+                <div className={`flex items-center justify-center w-7 h-7 rounded-lg shrink-0
                   ${toast.type === 'success' ? 'bg-emerald-400/10 shadow-[0_0_10px_rgba(0,255,180,0.3)]'
                   : toast.type === 'error'   ? 'bg-rose-400/10 shadow-[0_0_10px_rgba(255,50,120,0.3)]'
                   :                            'bg-sky-400/10 shadow-[0_0_10px_rgba(80,180,255,0.3)]'}`}>
