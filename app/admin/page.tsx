@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit, Trash2, Github, ExternalLink, Code2, Database, Globe, Smartphone, Lock, LogOut, User, Image, FolderKanban, ArrowRight, CheckCircle, XCircle, AlertCircle, Briefcase, Eye, EyeOff } from "lucide-react";
+import { Plus, Edit, Trash2, Github, ExternalLink, Code2, Database, Globe, Smartphone, Lock, LogOut, User, Image, FolderKanban, ArrowRight, CheckCircle, XCircle, AlertCircle, Briefcase, Eye, EyeOff, Upload, Save } from "lucide-react";
 
 type AdminSection = 'dashboard' | 'profile' | 'projects' | 'avatar' | 'experience';
 
@@ -408,184 +408,402 @@ export default function AdminPage() {
       animate={{ opacity: 1, y: 0 }}
       className="space-y-8"
     >
-      
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Profile Info */}
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setCurrentSection('profile')}
-          className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-left hover:border-cyan-500/50 transition-all group"
+          className="relative rounded-xl overflow-hidden text-left
+            bg-black/50 backdrop-blur-md
+            border border-cyan-400/25
+            hover:border-cyan-400/70
+            hover:shadow-[0_0_24px_rgba(0,255,255,0.12),inset_0_0_24px_rgba(0,255,255,0.03)]
+            transition-all duration-300 group p-6"
         >
+          <span className="absolute top-0 inset-x-0 h-px
+            bg-linear-to-r from-transparent via-cyan-400/50 to-transparent
+            opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500/20 transition-colors">
-              <User size={24} />
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center
+              bg-black/50 border border-cyan-400/30 text-cyan-400
+              group-hover:border-cyan-400/60
+              group-hover:shadow-[0_0_14px_rgba(0,255,255,0.2)]
+              transition-all duration-300">
+              <User size={22} />
             </div>
-            <ArrowRight size={20} className="text-zinc-600 group-hover:text-cyan-400 transition-colors" />
+            <ArrowRight size={18} className="text-zinc-600 group-hover:text-cyan-400
+              group-hover:translate-x-0.5 transition-all duration-300" />
           </div>
-          <h3 className="text-xl font-bold mb-2">Profile Info</h3>
-          <p className="text-zinc-400 text-sm">Update your personal information, bio, and contact details</p>
+          <h3 className="text-lg font-bold text-white mb-1">Profile Info</h3>
+          <p className="text-zinc-500 text-sm leading-relaxed">
+            Update your personal information, bio, and contact details
+          </p>
         </motion.button>
 
+        {/* Profile Picture */}
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setCurrentSection('avatar')}
-          className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-left hover:border-cyan-500/50 transition-all group"
+          className="relative rounded-xl overflow-hidden text-left
+            bg-black/50 backdrop-blur-md
+            border border-cyan-400/25
+            hover:border-cyan-400/70
+            hover:shadow-[0_0_24px_rgba(0,255,255,0.12),inset_0_0_24px_rgba(0,255,255,0.03)]
+            transition-all duration-300 group p-6"
         >
+          <span className="absolute top-0 inset-x-0 h-px
+            bg-linear-to-r from-transparent via-cyan-400/50 to-transparent
+            opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center text-purple-400 group-hover:bg-purple-500/20 transition-colors">
-              <Image size={24} />
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center
+              bg-black/50 border border-purple-400/30 text-purple-400
+              group-hover:border-purple-400/60
+              group-hover:shadow-[0_0_14px_rgba(168,85,247,0.2)]
+              transition-all duration-300">
+              <Image size={22} />
             </div>
-            <ArrowRight size={20} className="text-zinc-600 group-hover:text-cyan-400 transition-colors" />
+            <ArrowRight size={18} className="text-zinc-600 group-hover:text-cyan-400
+              group-hover:translate-x-0.5 transition-all duration-300" />
           </div>
-          <h3 className="text-xl font-bold mb-2">Profile Picture</h3>
-          <p className="text-zinc-400 text-sm">Change your profile picture and avatar</p>
+          <h3 className="text-lg font-bold text-white mb-1">Profile Picture</h3>
+          <p className="text-zinc-500 text-sm leading-relaxed">
+            Change your profile picture and avatar
+          </p>
         </motion.button>
 
+        {/* Projects */}
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setCurrentSection('projects')}
-          className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-left hover:border-cyan-500/50 transition-all group"
+          className="relative rounded-xl overflow-hidden text-left
+            bg-black/50 backdrop-blur-md
+            border border-cyan-400/25
+            hover:border-cyan-400/70
+            hover:shadow-[0_0_24px_rgba(0,255,255,0.12),inset_0_0_24px_rgba(0,255,255,0.03)]
+            transition-all duration-300 group p-6"
         >
+          <span className="absolute top-0 inset-x-0 h-px
+            bg-linear-to-r from-transparent via-cyan-400/50 to-transparent
+            opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center text-green-400 group-hover:bg-green-500/20 transition-colors">
-              <FolderKanban size={24} />
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center
+              bg-black/50 border border-emerald-400/30 text-emerald-400
+              group-hover:border-emerald-400/60
+              group-hover:shadow-[0_0_14px_rgba(52,211,153,0.2)]
+              transition-all duration-300">
+              <FolderKanban size={22} />
             </div>
-            <ArrowRight size={20} className="text-zinc-600 group-hover:text-cyan-400 transition-colors" />
+            <ArrowRight size={18} className="text-zinc-600 group-hover:text-cyan-400
+              group-hover:translate-x-0.5 transition-all duration-300" />
           </div>
-          <h3 className="text-xl font-bold mb-2">Projects</h3>
-          <p className="text-zinc-400 text-sm">Add, edit, or remove portfolio projects</p>
+          <h3 className="text-lg font-bold text-white mb-1">Projects</h3>
+          <p className="text-zinc-500 text-sm leading-relaxed">
+            Add, edit, or remove portfolio projects
+          </p>
         </motion.button>
 
+        {/* Experience */}
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setCurrentSection('experience')}
-          className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-left hover:border-cyan-500/50 transition-all group"
+          className="relative rounded-xl overflow-hidden text-left
+            bg-black/50 backdrop-blur-md
+            border border-cyan-400/25
+            hover:border-cyan-400/70
+            hover:shadow-[0_0_24px_rgba(0,255,255,0.12),inset_0_0_24px_rgba(0,255,255,0.03)]
+            transition-all duration-300 group p-6"
         >
+          <span className="absolute top-0 inset-x-0 h-px
+            bg-linear-to-r from-transparent via-cyan-400/50 to-transparent
+            opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center text-orange-400 group-hover:bg-orange-500/20 transition-colors">
-              <Briefcase size={24} />
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center
+              bg-black/50 border border-orange-400/30 text-orange-400
+              group-hover:border-orange-400/60
+              group-hover:shadow-[0_0_14px_rgba(251,146,60,0.2)]
+              transition-all duration-300">
+              <Briefcase size={22} />
             </div>
-            <ArrowRight size={20} className="text-zinc-600 group-hover:text-cyan-400 transition-colors" />
+            <ArrowRight size={18} className="text-zinc-600 group-hover:text-cyan-400
+              group-hover:translate-x-0.5 transition-all duration-300" />
           </div>
-          <h3 className="text-xl font-bold mb-2">Experience</h3>
-          <p className="text-zinc-400 text-sm">Add, edit, or remove work experience</p>
+          <h3 className="text-lg font-bold text-white mb-1">Experience</h3>
+          <p className="text-zinc-500 text-sm leading-relaxed">
+            Add, edit, or remove work experience
+          </p>
         </motion.button>
+
       </div>
     </motion.div>
-  );
+  ); 
 
-  const renderProfileSection = () => (
+    const renderProfileSection = () => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-8"
+      className="relative rounded-xl overflow-hidden
+        bg-black/50 backdrop-blur-md
+        border border-cyan-400/30
+        p-8"
     >
-      <div className="flex items-center gap-4 mb-6">
+      {/* Neon top line */}
+      <span className="absolute top-0 inset-x-0 h-px
+        bg-linear-to-r from-transparent via-cyan-400/60 to-transparent" />
+
+      {/* Corner glow */}
+      <span className="absolute top-0 right-0 w-48 h-48
+        bg-cyan-400/5 blur-3xl rounded-full pointer-events-none" />
+
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-8 relative">
         <button
           onClick={() => setCurrentSection('dashboard')}
-          className="p-2 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-cyan-400"
+          className="w-9 h-9 flex items-center justify-center rounded-lg
+            bg-black/50 border border-cyan-400/40 text-cyan-400
+            backdrop-blur-md
+            hover:border-cyan-400/80 hover:shadow-[0_0_16px_rgba(0,255,255,0.3)]
+            transition-all duration-200"
         >
-          <ArrowRight size={20} className="rotate-180" />
+          <ArrowRight size={16} className="rotate-180" />
         </button>
-        <h2 className="text-2xl font-bold">Profile Information</h2>
+        <h2 className="text-2xl font-bold text-white">Profile Information</h2>
       </div>
-      <form onSubmit={handleSaveProfile} className="space-y-6">
+
+      <form onSubmit={handleSaveProfile} className="space-y-5 relative">
+
+        {/* Row 1 */}
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">Full Name</label>
+          <div className="space-y-1.5">
+            <label className="font-mono text-xs text-cyan-400/50 tracking-widest uppercase">
+              Full Name
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                value={formProfile.fullName}
+                onChange={(e) => updateFormField('fullName', e.target.value)}
+                className="w-full px-4 py-3 rounded-lg text-sm text-white
+                  bg-black/50 backdrop-blur-sm
+                  border border-cyan-400/20
+                  placeholder:text-zinc-600
+                  focus:border-cyan-400/70
+                  focus:shadow-[0_0_16px_rgba(0,255,255,0.12)]
+                  focus:outline-none transition-all duration-200"
+              />
+              <span className="absolute bottom-0 left-3 right-3 h-px
+                bg-linear-to-r from-transparent via-cyan-400/20 to-transparent" />
+            </div>
+          </div>
+          <div className="space-y-1.5">
+            <label className="font-mono text-xs text-cyan-400/50 tracking-widest uppercase">
+              Title / Role
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                value={formProfile.title}
+                onChange={(e) => updateFormField('title', e.target.value)}
+                placeholder="e.g. Full-Stack Developer"
+                className="w-full px-4 py-3 rounded-lg text-sm text-white
+                  bg-black/50 backdrop-blur-sm
+                  border border-cyan-400/20
+                  placeholder:text-zinc-600
+                  focus:border-cyan-400/70
+                  focus:shadow-[0_0_16px_rgba(0,255,255,0.12)]
+                  focus:outline-none transition-all duration-200"
+              />
+              <span className="absolute bottom-0 left-3 right-3 h-px
+                bg-linear-to-r from-transparent via-cyan-400/20 to-transparent" />
+            </div>
+          </div>
+        </div>
+
+        {/* Row 2 */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="font-mono text-xs text-cyan-400/50 tracking-widest uppercase">
+              Email
+            </label>
+            <div className="relative">
+              <input
+                type="email"
+                value={formProfile.email}
+                onChange={(e) => updateFormField('email', e.target.value)}
+                className="w-full px-4 py-3 rounded-lg text-sm text-white
+                  bg-black/50 backdrop-blur-sm
+                  border border-cyan-400/20
+                  placeholder:text-zinc-600
+                  focus:border-cyan-400/70
+                  focus:shadow-[0_0_16px_rgba(0,255,255,0.12)]
+                  focus:outline-none transition-all duration-200"
+              />
+              <span className="absolute bottom-0 left-3 right-3 h-px
+                bg-linear-to-r from-transparent via-cyan-400/20 to-transparent" />
+            </div>
+          </div>
+          <div className="space-y-1.5">
+            <label className="font-mono text-xs text-cyan-400/50 tracking-widest uppercase">
+              Phone
+            </label>
+            <div className="relative">
+              <input
+                type="tel"
+                value={formProfile.phone}
+                onChange={(e) => updateFormField('phone', e.target.value)}
+                className="w-full px-4 py-3 rounded-lg text-sm text-white
+                  bg-black/50 backdrop-blur-sm
+                  border border-cyan-400/20
+                  placeholder:text-zinc-600
+                  focus:border-cyan-400/70
+                  focus:shadow-[0_0_16px_rgba(0,255,255,0.12)]
+                  focus:outline-none transition-all duration-200"
+              />
+              <span className="absolute bottom-0 left-3 right-3 h-px
+                bg-linear-to-r from-transparent via-cyan-400/20 to-transparent" />
+            </div>
+          </div>
+        </div>
+
+        {/* Location */}
+        <div className="space-y-1.5">
+          <label className="font-mono text-xs text-cyan-400/50 tracking-widest uppercase">
+            Location
+          </label>
+          <div className="relative">
             <input
               type="text"
-              value={formProfile.fullName}
-              onChange={(e) => updateFormField('fullName', e.target.value)}
-              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+              value={formProfile.location}
+              onChange={(e) => updateFormField('location', e.target.value)}
+              placeholder="e.g. Madagascar"
+              className="w-full px-4 py-3 rounded-lg text-sm text-white
+                bg-black/50 backdrop-blur-sm
+                border border-cyan-400/20
+                placeholder:text-zinc-600
+                focus:border-cyan-400/70
+                focus:shadow-[0_0_16px_rgba(0,255,255,0.12)]
+                focus:outline-none transition-all duration-200"
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">Title / Role</label>
-            <input
-              type="text"
-              value={formProfile.title}
-              onChange={(e) => updateFormField('title', e.target.value)}
-              placeholder="e.g. Full-Stack Developer"
-              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
-            />
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">Email</label>
-            <input
-              type="email"
-              value={formProfile.email}
-              onChange={(e) => updateFormField('email', e.target.value)}
-              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">Phone</label>
-            <input
-              type="tel"
-              value={formProfile.phone}
-              onChange={(e) => updateFormField('phone', e.target.value)}
-              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
-            />
+            <span className="absolute bottom-0 left-3 right-3 h-px
+              bg-linear-to-r from-transparent via-cyan-400/20 to-transparent" />
           </div>
         </div>
-        <div>
-          <label className="block text-sm font-medium mb-2">Location</label>
-          <input
-            type="text"
-            value={formProfile.location}
-            onChange={(e) => updateFormField('location', e.target.value)}
-            placeholder="e.g. Madagascar"
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
-          />
+
+        {/* Bio */}
+        <div className="space-y-1.5">
+          <label className="font-mono text-xs text-cyan-400/50 tracking-widest uppercase">
+            Bio
+          </label>
+          <div className="relative">
+            <textarea
+              rows={4}
+              value={formProfile.bio}
+              onChange={(e) => updateFormField('bio', e.target.value)}
+              className="w-full px-4 py-3 rounded-lg text-sm text-white
+                bg-black/50 backdrop-blur-sm
+                border border-cyan-400/20
+                placeholder:text-zinc-600
+                focus:border-cyan-400/70
+                focus:shadow-[0_0_16px_rgba(0,255,255,0.12)]
+                focus:outline-none transition-all duration-200
+                resize-none"
+            />
+            <span className="absolute bottom-0 left-3 right-3 h-px
+              bg-linear-to-r from-transparent via-cyan-400/20 to-transparent" />
+          </div>
         </div>
-        <div>
-          <label className="block text-sm font-medium mb-2">Bio</label>
-          <textarea
-            rows={4}
-            value={formProfile.bio}
-            onChange={(e) => updateFormField('bio', e.target.value)}
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none resize-none"
-          />
-        </div>
+
+        {/* Divider */}
+        <div className="h-px bg-linear-to-r from-cyan-400/20 via-cyan-400/10 to-transparent" />
+
+        {/* Submit */}
         <button
           type="submit"
-          className="px-6 py-3 bg-cyan-500 text-black font-bold rounded-lg hover:bg-cyan-400 transition-colors"
+          className="relative flex items-center gap-2 px-6 py-3 rounded-lg
+            bg-cyan-400/10 border border-cyan-400/50 text-cyan-400
+            font-bold text-sm tracking-widest uppercase
+            hover:bg-cyan-400/20 hover:border-cyan-400
+            hover:shadow-[0_0_24px_rgba(0,255,255,0.3)]
+            active:scale-[0.98]
+            transition-all duration-200 overflow-hidden group"
         >
+          <span className="absolute inset-0 bg-linear-to-r from-cyan-400/0 via-cyan-400/5 to-cyan-400/0
+            -translate-x-full group-hover:translate-x-full
+            transition-transform duration-700" />
+          <Save size={15} />
           Save Changes
         </button>
+
       </form>
     </motion.div>
   );
 
-  const renderAvatarSection = () => (
+    const renderAvatarSection = () => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-8"
+      className="relative rounded-xl overflow-hidden
+        bg-black/50 backdrop-blur-md
+        border border-cyan-400/30
+        p-8"
     >
-      <div className="flex items-center gap-4 mb-6">
+      {/* Neon top line */}
+      <span className="absolute top-0 inset-x-0 h-px
+        bg-linear-to-r from-transparent via-cyan-400/60 to-transparent" />
+
+      {/* Corner glow */}
+      <span className="absolute top-0 left-0 w-32 h-32
+        bg-cyan-400/5 blur-2xl rounded-full pointer-events-none" />
+
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-8 relative">
         <button
           onClick={() => setCurrentSection('dashboard')}
-          className="p-2 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-cyan-400"
+          className="w-9 h-9 flex items-center justify-center rounded-lg
+            bg-black/50 border border-cyan-400/40 text-cyan-400
+            backdrop-blur-md
+            hover:border-cyan-400/80 hover:shadow-[0_0_16px_rgba(0,255,255,0.3)]
+            transition-all duration-200"
         >
-          <ArrowRight size={20} className="rotate-180" />
+          <ArrowRight size={16} className="rotate-180" />
         </button>
-        <h2 className="text-2xl font-bold">Profile Picture</h2>
+        <h2 className="text-2xl font-bold text-white">Profile Picture</h2>
       </div>
-      <div className="space-y-6">
-        <div className="flex items-center gap-6">
-          <div className="w-32 h-32 bg-zinc-800 rounded-full flex items-center justify-center overflow-hidden">
-            <img src="/images/profile/me.png" alt="Profile" className="w-full h-full object-cover" />
+
+      <div className="space-y-8 relative">
+
+        {/* Avatar row */}
+        <div className="flex items-center gap-8">
+
+          {/* Avatar ring */}
+          <div className="relative shrink-0">
+            <div className="absolute inset-0 rounded-full
+              shadow-[0_0_24px_rgba(0,255,255,0.25)]
+              border border-cyan-400/40 rounded-full" />
+            <div className="w-32 h-32 rounded-full overflow-hidden
+              bg-black/60 border-2 border-cyan-400/30
+              ring-4 ring-cyan-400/10">
+              <img
+                src="/images/profile/me.png"
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            {/* Online dot */}
+            <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full
+              bg-cyan-400 border-2 border-black
+              shadow-[0_0_8px_rgba(0,255,255,0.8)]" />
           </div>
-          <div>
-            <p className="text-zinc-400 mb-4">Current profile picture</p>
+
+          <div className="space-y-3">
+            <p className="font-mono text-xs text-cyan-400/50 tracking-widest uppercase">
+              Current avatar
+            </p>
+
             <input
               type="file"
               id="avatar-upload"
@@ -596,17 +814,14 @@ export default function AdminPage() {
                 if (file) {
                   const formData = new FormData();
                   formData.append('file', file);
-                  
                   try {
                     const response = await fetch('/api/upload-avatar', {
                       method: 'POST',
                       body: formData,
                     });
                     const result = await response.json();
-                    
                     if (result.success) {
                       showToast('success', 'Image uploaded successfully!');
-                      // Recharger l'image
                       window.location.reload();
                     } else {
                       showToast('error', 'Failed to upload image');
@@ -618,22 +833,52 @@ export default function AdminPage() {
                 }
               }}
             />
+
             <button
               onClick={() => document.getElementById('avatar-upload')?.click()}
-              className="px-4 py-2 bg-zinc-700 text-white rounded-lg hover:bg-zinc-600 transition-colors"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg
+                bg-black/50 border border-cyan-400/40 text-cyan-400
+                backdrop-blur-md font-medium text-sm tracking-wide
+                hover:border-cyan-400/80 hover:shadow-[0_0_18px_rgba(0,255,255,0.25)]
+                hover:bg-cyan-400/5
+                transition-all duration-200"
             >
+              <Upload size={15} />
               Upload New Picture
             </button>
           </div>
         </div>
-        <div>
-          <label className="block text-sm font-medium mb-2">Or paste image URL</label>
-          <input
-            type="url"
-            placeholder="https://example.com/profile.jpg"
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
-          />
+
+        {/* Divider */}
+        <div className="flex items-center gap-3">
+          <div className="flex-1 h-px bg-linear-to-r from-cyan-400/20 to-transparent" />
+          <span className="font-mono text-xs text-cyan-400/30 tracking-widest">OR</span>
+          <div className="flex-1 h-px bg-linear-to-l from-cyan-400/20 to-transparent" />
         </div>
+
+        {/* URL input */}
+        <div className="space-y-2">
+          <label className="font-mono text-xs text-cyan-400/50 tracking-widest uppercase">
+            Paste image URL
+          </label>
+          <div className="relative">
+            <input
+              type="url"
+              placeholder="https://example.com/profile.jpg"
+              className="w-full px-4 py-3 rounded-lg text-sm text-white
+                bg-black/50 backdrop-blur-md
+                border border-cyan-400/25
+                placeholder:text-zinc-600 placeholder:font-mono placeholder:text-xs
+                focus:border-cyan-400/70 focus:shadow-[0_0_16px_rgba(0,255,255,0.15)]
+                focus:outline-none
+                transition-all duration-200"
+            />
+            {/* Input bottom neon line */}
+            <span className="absolute bottom-0 left-4 right-4 h-px
+              bg-linear-to-r from-transparent via-cyan-400/30 to-transparent" />
+          </div>
+        </div>
+
       </div>
     </motion.div>
   );
@@ -642,53 +887,92 @@ export default function AdminPage() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
+      className="space-y-5"
     >
+      {/* Header */}
       <div className="flex items-center gap-4">
         <button
           onClick={() => setCurrentSection('dashboard')}
-          className="p-2 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-cyan-400"
+          className="w-9 h-9 flex items-center justify-center rounded-lg
+            bg-black/50 border border-cyan-400/40 text-cyan-400
+            backdrop-blur-md
+            hover:border-cyan-400/80 hover:shadow-[0_0_16px_rgba(0,255,255,0.3)]
+            transition-all duration-200"
         >
-          <ArrowRight size={20} className="rotate-180" />
+          <ArrowRight size={16} className="rotate-180" />
         </button>
-        <h2 className="text-2xl font-bold">Projects Management</h2>
+
+        <h2 className="text-2xl font-bold text-white">
+          Projects Management
+        </h2>
       </div>
+
       {loading ? (
         <div className="text-center py-12">
-          <div className="text-cyan-400">Loading projects...</div>
+          <div className="text-cyan-400 font-mono tracking-widest animate-pulse text-sm">
+            LOADING...
+          </div>
         </div>
       ) : (
-        <div className="grid gap-4">
+        <div className="flex flex-col gap-3">
           {projects.map((project) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 flex items-center gap-6"
+              className="relative flex items-center gap-5 px-5 py-4 rounded-xl overflow-hidden
+                bg-black/50 backdrop-blur-md
+                border border-cyan-400/30
+                hover:border-cyan-400/70
+                hover:shadow-[0_0_20px_rgba(0,255,255,0.15),inset_0_0_20px_rgba(0,255,255,0.03)]
+                transition-all duration-300 group"
             >
-              <div className="w-16 h-16 bg-zinc-800 rounded-lg flex items-center justify-center text-cyan-400">
+              {/* Neon top line */}
+              <span className="absolute top-0 inset-x-0 h-px
+                bg-linear-to-r from-transparent via-cyan-400/60 to-transparent
+                opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+              {/* Icon */}
+              <div className="w-14 h-14 shrink-0 rounded-lg flex items-center justify-center
+                bg-black/50 border border-cyan-400/30 text-cyan-400
+                group-hover:border-cyan-400/60
+                group-hover:shadow-[0_0_14px_rgba(0,255,255,0.2)]
+                transition-all duration-300">
                 {getIconComponent(project.icon)}
               </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-cyan-400 text-sm font-mono">{project.index}</span>
-                  <h3 className="text-xl font-bold">{project.title}</h3>
+
+              {/* Info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-3 mb-1">
+                  <span className="font-mono text-xs text-cyan-400 tracking-widest">
+                    {project.index}
+                  </span>
+                  <h3 className="text-lg font-bold text-white">{project.title}</h3>
                 </div>
-                <p className="text-zinc-400 text-sm">{project.description}</p>
-                <p className="text-zinc-500 text-xs mt-1">{project.image}</p>
+                <p className="text-sm text-zinc-400 truncate">{project.description}</p>
+                <p className="font-mono text-xs text-cyan-400/30 mt-0.5">{project.image}</p>
               </div>
-              <div className="flex gap-2">
+
+              {/* Actions */}
+              <div className="flex gap-2 shrink-0">
                 <button
                   onClick={() => handleEditProject(project)}
-                  className="p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-cyan-400"
+                  className="w-9 h-9 flex items-center justify-center rounded-lg
+                    bg-black/50 border border-cyan-400/30 text-cyan-400
+                    hover:border-cyan-400/70 hover:shadow-[0_0_12px_rgba(0,255,255,0.25)]
+                    transition-all duration-200"
                 >
-                  <Edit size={20} />
+                  <Edit size={16} />
                 </button>
                 <button
                   onClick={() => handleDeleteProject(project.id)}
-                  className="p-3 bg-zinc-800 rounded-lg hover:bg-red-500/20 hover:text-red-400 transition-colors"
+                  className="w-9 h-9 flex items-center justify-center rounded-lg
+                    bg-black/50 border border-zinc-700/60 text-zinc-500
+                    hover:border-red-500/60 hover:text-red-400
+                    hover:shadow-[0_0_12px_rgba(255,60,60,0.2)]
+                    transition-all duration-200"
                 >
-                  <Trash2 size={20} />
+                  <Trash2 size={16} />
                 </button>
               </div>
             </motion.div>
@@ -699,66 +983,119 @@ export default function AdminPage() {
   );
 
   const renderExperienceSection = () => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
-    >
-      <div className="flex items-center gap-4">
-        <button
-          onClick={() => setCurrentSection('dashboard')}
-          className="p-2 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-cyan-400"
-        >
-          <ArrowRight size={20} className="rotate-180" />
-        </button>
-        <h2 className="text-2xl font-bold">Work Experience</h2>
-      </div>
-      <div className="grid gap-4">
-        {experiences.map((experience) => (
-          <motion.div
-            key={experience.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6"
-          >
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-xl font-bold text-white">{experience.position}</h3>
-                <p className="text-cyan-400 font-medium">{experience.company}</p>
-                <p className="text-zinc-400 text-sm mt-1">
-                  {experience.startDate} - {experience.current ? 'Present' : experience.endDate}
-                </p>
-                <p className="text-zinc-300 text-sm mt-3">{experience.description}</p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    setEditingExperience(experience);
-                    setShowExperienceForm(true);
-                  }}
-                  className="p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors text-cyan-400"
-                >
-                  <Edit size={20} />
-                </button>
-                <button
-                  onClick={() => handleDeleteExperience(experience.id)}
-                  className="p-3 bg-zinc-800 rounded-lg hover:bg-red-500/20 hover:text-red-400 transition-colors"
-                >
-                  <Trash2 size={20} />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-        {experiences.length === 0 && (
-          <div className="text-center py-12 text-zinc-400">
-            No experience added yet. Click "Add Experience" to add your work history.
-          </div>
-        )}
-      </div>
-    </motion.div>
-  );
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="space-y-5"
+  >
+    {/* Header */}
+    <div className="flex items-center gap-4">
+      <button
+        onClick={() => setCurrentSection('dashboard')}
+        className="w-9 h-9 flex items-center justify-center rounded-lg
+          bg-black/50 border border-cyan-400/40 text-cyan-400
+          backdrop-blur-md
+          hover:border-cyan-400/80 hover:shadow-[0_0_16px_rgba(0,255,255,0.3)]
+          transition-all duration-200"
+      >
+        <ArrowRight size={16} className="rotate-180" />
+      </button>
+      <h2 className="text-2xl font-bold text-white">Work Experience</h2>
+    </div>
 
+    <div className="flex flex-col gap-3">
+      {experiences.map((experience) => (
+        <motion.div
+          key={experience.id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative rounded-xl overflow-hidden
+            bg-black/50 backdrop-blur-md
+            border border-cyan-400/30
+            hover:border-cyan-400/70
+            hover:shadow-[0_0_20px_rgba(0,255,255,0.15),inset_0_0_20px_rgba(0,255,255,0.03)]
+            transition-all duration-300 group"
+        >
+          {/* Neon top line */}
+          <span className="absolute top-0 inset-x-0 h-px
+            bg-linear-to-r from-transparent via-cyan-400/60 to-transparent
+            opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+          {/* Left accent bar */}
+          <span className="absolute left-0 top-4 bottom-4 w-px
+            bg-linear-to-b from-transparent via-cyan-400/50 to-transparent" />
+
+          <div className="px-6 py-5 flex justify-between items-start gap-4">
+            <div className="flex-1 min-w-0">
+
+              {/* Position + company */}
+              <h3 className="text-lg font-bold text-white leading-tight">
+                {experience.position}
+              </h3>
+              <p className="text-cyan-400 font-medium text-sm mt-0.5">
+                {experience.company}
+              </p>
+
+              {/* Date badge */}
+              <span className="inline-flex items-center mt-2 px-2.5 py-0.5 rounded-md
+                bg-black/50 border border-cyan-400/20 backdrop-blur-sm
+                font-mono text-xs text-cyan-400/70 tracking-wider">
+                {experience.startDate} — {experience.current ? 'Present' : experience.endDate}
+              </span>
+
+              {/* Description */}
+              <p className="text-zinc-400 text-sm mt-3 leading-relaxed">
+                {experience.description}
+              </p>
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-2 shrink-0 mt-1">
+              <button
+                onClick={() => {
+                  setEditingExperience(experience);
+                  setShowExperienceForm(true);
+                }}
+                className="w-9 h-9 flex items-center justify-center rounded-lg
+                  bg-black/50 border border-cyan-400/30 text-cyan-400
+                  hover:border-cyan-400/70 hover:shadow-[0_0_12px_rgba(0,255,255,0.25)]
+                  transition-all duration-200"
+              >
+                <Edit size={16} />
+              </button>
+              <button
+                onClick={() => handleDeleteExperience(experience.id)}
+                className="w-9 h-9 flex items-center justify-center rounded-lg
+                  bg-black/50 border border-zinc-700/60 text-zinc-500
+                  hover:border-red-500/60 hover:text-red-400
+                  hover:shadow-[0_0_12px_rgba(255,60,60,0.2)]
+                  transition-all duration-200"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      ))}
+
+      {experiences.length === 0 && (
+        <div className="relative rounded-xl overflow-hidden
+          bg-black/50 backdrop-blur-md border border-cyan-400/20
+          py-14 text-center">
+          <span className="absolute top-0 inset-x-0 h-px
+            bg-linear-to-r from-transparent via-cyan-400/30 to-transparent" />
+          <p className="font-mono text-sm text-cyan-400/40 tracking-widest">
+            NO EXPERIENCE RECORDS FOUND
+          </p>
+          <p className="text-zinc-600 text-xs mt-2">
+            Click "Add Experience" to add your work history.
+          </p>
+        </div>
+      )}
+    </div>
+  </motion.div>
+);
+ 
   return (
     <main className="min-h-screen text-white">
       <Navbar />
