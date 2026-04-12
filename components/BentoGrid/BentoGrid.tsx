@@ -19,7 +19,7 @@ const items = [
     description: "Robust MEAN & PEAN architectures.",
     backTitle: "Backend Systems",
     backDesc: "REST & GraphQL APIs with Node/Express, scalable DB schemas, JWT auth, and clean layered architecture from route to repository.",
-    backTechs: ["Node.js", "Express", "MongoDB", "PostgreSQL"],
+    backTechs: ["Node.js", "Express",  "PostgreSQL"],
     icon: <Server size={24} color="#34d399" />,
     spanTwo: false,
     color: "#064e3b",

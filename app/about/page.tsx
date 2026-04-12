@@ -9,7 +9,7 @@ const skills = [
   { name: "Node.js & Express", level: 45 },
   { name: "UI/UX Design", level: 45 },
   { name: "PostgreSQL & MongoDB", level: 35 },
-  { name: "DevOps & CI/CD", level: 5 },
+  { name: "DevOps & CI/CD", level:   5 },
 ];
 
 interface Experience {

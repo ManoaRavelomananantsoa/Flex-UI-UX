@@ -377,7 +377,7 @@ export default function ContactPage() {
                 <div className="flex gap-4">
                   {[
                     { href: "https://github.com/ManoaRavelomananantsoa", icon: <Github size={18} />, label: "GitHub" },
-                    { href: "https://linkedin.com", icon: <Linkedin size={18} />, label: "LinkedIn" },
+                    // { href: "https://linkedin.com", icon: <Linkedin size={18} />, label: "LinkedIn" },
                   ].map(({ href, icon, label }) => (
                     <a
                       key={label}
