@@ -175,26 +175,60 @@ export default function AdminPage() {
         </div>
 
         {/* Toast Container */}
-        <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+        <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2.5">
           <AnimatePresence>
             {toasts.map((toast) => (
               <motion.div
                 key={toast.id}
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 100 }}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg ${
-                  toast.type === 'success' 
-                    ? 'bg-green-500/90 text-white' 
-                    : toast.type === 'error' 
-                    ? 'bg-red-500/90 text-white' 
-                    : 'bg-blue-500/90 text-white'
-                }`}
+                initial={{ opacity: 0, x: 60, scale: 0.95 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: 60, scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                className={`relative flex items-center gap-3 px-4 py-3 rounded-xl overflow-hidden
+                  backdrop-blur-xl font-['Rajdhani',sans-serif] tracking-wide
+                  ${toast.type === 'success'
+                    ? 'bg-emerald-400/[0.07] shadow-[0_0_0_1px_rgba(0,255,180,0.25),0_0_20px_rgba(0,255,180,0.12),inset_0_1px_0_rgba(255,255,255,0.08)] text-emerald-200'
+                    : toast.type === 'error'
+                    ? 'bg-rose-400/[0.07] shadow-[0_0_0_1px_rgba(255,50,120,0.25),0_0_20px_rgba(255,50,120,0.12),inset_0_1px_0_rgba(255,255,255,0.08)] text-rose-200'
+                    : 'bg-sky-400/[0.07] shadow-[0_0_0_1px_rgba(80,180,255,0.25),0_0_20px_rgba(80,180,255,0.12),inset_0_1px_0_rgba(255,255,255,0.08)] text-sky-200'
+                  }`}
               >
-                {toast.type === 'success' && <CheckCircle size={20} />}
-                {toast.type === 'error' && <XCircle size={20} />}
-                {toast.type === 'info' && <AlertCircle size={20} />}
-                <span className="text-sm font-medium">{toast.message}</span>
+                {/* Ligne lumineuse en haut */}
+                <span className={`absolute top-0 left-4 right-4 h-px rounded-full opacity-60
+                  ${toast.type === 'success' ? 'bg-gradient-to-r from-transparent via-emerald-400 to-transparent'
+                  : toast.type === 'error'   ? 'bg-gradient-to-r from-transparent via-rose-400 to-transparent'
+                  :                            'bg-gradient-to-r from-transparent via-sky-400 to-transparent'}`}
+                />
+
+                {/* Icône */}
+                <div className={`flex items-center justify-center w-7 h-7 rounded-lg flex-shrink-0
+                  ${toast.type === 'success' ? 'bg-emerald-400/10 shadow-[0_0_10px_rgba(0,255,180,0.3)]'
+                  : toast.type === 'error'   ? 'bg-rose-400/10 shadow-[0_0_10px_rgba(255,50,120,0.3)]'
+                  :                            'bg-sky-400/10 shadow-[0_0_10px_rgba(80,180,255,0.3)]'}`}>
+                  {toast.type === 'success' && <CheckCircle size={14} />}
+                  {toast.type === 'error'   && <XCircle size={14} />}
+                  {toast.type === 'info'    && <AlertCircle size={14} />}
+                </div>
+
+                {/* Texte */}
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest opacity-50">
+                    {toast.type === 'success' ? 'System OK' : toast.type === 'error' ? 'Alert' : 'Notice'}
+                  </span>
+                  <span className="text-[13px] font-semibold leading-tight">{toast.message}</span>
+                </div>
+
+                {/* Barre de progression */}
+                <motion.span
+                  className={`absolute bottom-0 left-4 right-4 h-px rounded-full
+                    ${toast.type === 'success' ? 'bg-emerald-400/50'
+                    : toast.type === 'error'   ? 'bg-rose-400/50'
+                    :                            'bg-sky-400/50'}`}
+                  initial={{ scaleX: 1 }}
+                  animate={{ scaleX: 0 }}
+                  transition={{ duration: 4, ease: 'linear' }}
+                  style={{ transformOrigin: 'left' }}
+                />
               </motion.div>
             ))}
           </AnimatePresence>
