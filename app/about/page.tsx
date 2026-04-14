@@ -3,13 +3,16 @@ import { Navbar } from "@/components/Navbar";
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
-const skills = [
+const frontendSkills = [
   { name: "React & Next.js", level: 55 },
   { name: "TypeScript", level: 60 },
-  { name: "Node.js & Express", level: 45 },
   { name: "UI/UX Design", level: 45 },
+];
+
+const backendSkills = [
+  { name: "Node.js & Express", level: 45 },
   { name: "PostgreSQL & MongoDB", level: 35 },
-  { name: "DevOps & CI/CD", level:   5 },
+  { name: "DevOps & CI/CD", level: 5 },
 ];
 
 interface Experience {
@@ -375,38 +378,78 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="mb-20"
           >
-            <div className="flex items-center gap-3 mb-8">
-              <span className="text-cyan-400 text-lg">◈</span>
-              <h3 className="font-mono text-sm tracking-[3px] text-cyan-400 uppercase">Technical Skills</h3>
-              <div className="flex-1 h-px bg-linear-to-r from-cyan-400/50 to-transparent" />
+            {/* Frontend Skills */}
+            <div className="mb-12">
+              <div className="flex items-center gap-3 mb-8">
+                <span className="text-cyan-400 text-lg">◈</span>
+                <h3 className="font-mono text-sm tracking-[3px] text-cyan-400 uppercase">Frontend Skills</h3>
+                <div className="flex-1 h-px bg-linear-to-r from-cyan-400/50 to-transparent" />
+              </div>
+
+              <div ref={skillsRef} className="grid md:grid-cols-2 gap-4">
+                {frontendSkills.map((skill, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    whileHover={{ borderColor: "rgba(0,200,255,0.5)", boxShadow: "0 0 30px rgba(0,200,255,0.08), inset 0 0 30px rgba(0,200,255,0.03)" }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: i * 0.08 }}
+                    className="bg-[#00050f]/60 border border-cyan-500/15 rounded-xl p-4 transition-colors"
+                  >
+                    <div className="flex justify-between mb-2.5">
+                      <span className="text-sm font-semibold text-cyan-100/80">{skill.name}</span>
+                      <span className="font-mono text-sm text-cyan-400">{skill.level}%</span>
+                    </div>
+                    <div className="h-1 bg-cyan-500/10 rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={skillsInView ? { width: `${skill.level}%` } : {}}
+                        transition={{ duration: 1.2, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        className="h-full rounded-full bg-linear-to-r from-blue-600 to-cyan-400"
+                        style={{ boxShadow: "0 0 8px rgba(0,200,255,0.6)" }}
+                      />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
 
-            <div ref={skillsRef} className="grid md:grid-cols-2 gap-4">
-              {skills.map((skill, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  whileHover={{ borderColor: "rgba(0,200,255,0.5)", boxShadow: "0 0 30px rgba(0,200,255,0.08), inset 0 0 30px rgba(0,200,255,0.03)" }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.08 }}
-                  className="bg-[#00050f]/60 border border-cyan-500/15 rounded-xl p-4 transition-colors"
-                >
-                  <div className="flex justify-between mb-2.5">
-                    <span className="text-sm font-semibold text-cyan-100/80">{skill.name}</span>
-                    <span className="font-mono text-sm text-cyan-400">{skill.level}%</span>
-                  </div>
-                  <div className="h-1 bg-cyan-500/10 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={skillsInView ? { width: `${skill.level}%` } : {}}
-                      transition={{ duration: 1.2, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                      className="h-full rounded-full bg-linear-to-r from-blue-600 to-cyan-400"
-                      style={{ boxShadow: "0 0 8px rgba(0,200,255,0.6)" }}
-                    />
-                  </div>
-                </motion.div>
-              ))}
+            {/* Backend Skills */}
+            <div>
+              <div className="flex items-center gap-3 mb-8">
+                <span className="text-purple-400 text-lg">◈</span>
+                <h3 className="font-mono text-sm tracking-[3px] text-purple-400 uppercase">Backend Skills</h3>
+                <div className="flex-1 h-px bg-linear-to-r from-purple-400/50 to-transparent" />
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                {backendSkills.map((skill, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    whileHover={{ borderColor: "rgba(168,85,247,0.5)", boxShadow: "0 0 30px rgba(168,85,247,0.08), inset 0 0 30px rgba(168,85,247,0.03)" }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: i * 0.08 }}
+                    className="bg-[#00050f]/60 border border-purple-500/15 rounded-xl p-4 transition-colors"
+                  >
+                    <div className="flex justify-between mb-2.5">
+                      <span className="text-sm font-semibold text-cyan-100/80">{skill.name}</span>
+                      <span className="font-mono text-sm text-purple-400">{skill.level}%</span>
+                    </div>
+                    <div className="h-1 bg-purple-500/10 rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={skillsInView ? { width: `${skill.level}%` } : {}}
+                        transition={{ duration: 1.2, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        className="h-full rounded-full bg-linear-to-r from-purple-600 to-purple-400"
+                        style={{ boxShadow: "0 0 8px rgba(168,85,247,0.6)" }}
+                      />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </motion.div>
 
