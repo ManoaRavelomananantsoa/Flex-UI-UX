@@ -14,19 +14,20 @@ interface Project {
 const PROJECTS_FILE = join(process.cwd(), 'data', 'projects.json');
 
 // PUT - Mettre à jour un projet
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const data = await readFile(PROJECTS_FILE, 'utf-8');
     const projects: Project[] = JSON.parse(data);
     
     const updatedProject = await request.json();
-    const index = projects.findIndex(p => p.id === params.id);
+    const index = projects.findIndex(p => p.id === id);
     
     if (index === -1) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
     
-    projects[index] = { ...projects[index], ...updatedProject, id: params.id };
+    projects[index] = { ...projects[index], ...updatedProject, id };
     await writeFile(PROJECTS_FILE, JSON.stringify(projects, null, 2));
     
     return NextResponse.json(projects[index]);
@@ -37,12 +38,13 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 // DELETE - Supprimer un projet
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const data = await readFile(PROJECTS_FILE, 'utf-8');
     const projects: Project[] = JSON.parse(data);
     
-    const index = projects.findIndex(p => p.id === params.id);
+    const index = projects.findIndex(p => p.id === id);
     
     if (index === -1) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });

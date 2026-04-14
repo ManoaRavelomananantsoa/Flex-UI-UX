@@ -15,19 +15,20 @@ interface Experience {
 const EXPERIENCE_FILE = join(process.cwd(), 'data', 'experience.json');
 
 // PUT - Mettre à jour une expérience
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const data = await readFile(EXPERIENCE_FILE, 'utf-8');
     const experiences: Experience[] = JSON.parse(data);
     
     const updatedExperience = await request.json();
-    const index = experiences.findIndex(e => e.id === params.id);
+    const index = experiences.findIndex(e => e.id === id);
     
     if (index === -1) {
       return NextResponse.json({ error: 'Experience not found' }, { status: 404 });
     }
     
-    experiences[index] = { ...experiences[index], ...updatedExperience, id: params.id };
+    experiences[index] = { ...experiences[index], ...updatedExperience, id };
     await writeFile(EXPERIENCE_FILE, JSON.stringify(experiences, null, 2));
     
     return NextResponse.json(experiences[index]);
@@ -38,12 +39,13 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 // DELETE - Supprimer une expérience
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const data = await readFile(EXPERIENCE_FILE, 'utf-8');
     const experiences: Experience[] = JSON.parse(data);
     
-    const index = experiences.findIndex(e => e.id === params.id);
+    const index = experiences.findIndex(e => e.id === id);
     
     if (index === -1) {
       return NextResponse.json({ error: 'Experience not found' }, { status: 404 });

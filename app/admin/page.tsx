@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Edit, Trash2, Github, ExternalLink, Code2, Database, Globe, Smartphone, Lock, LogOut, User, Image, FolderKanban, ArrowRight, CheckCircle, XCircle, AlertCircle, Briefcase, Eye, EyeOff, Upload, Save } from "lucide-react";
+import ConfirmModal from "./ConfirmModal";
 
 type AdminSection = 'dashboard' | 'profile' | 'projects' | 'avatar' | 'experience';
 
@@ -64,6 +65,13 @@ export default function AdminPage() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [profile, setProfile] = useState<Profile>(defaultProfile);
   const [formProfile, setFormProfile] = useState<Profile>(defaultProfile);
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    type: 'project' as 'project' | 'experience',
+    id: '',
+    title: '',
+    message: ''
+  });
 
   // Synchroniser le formulaire quand le profil est chargé
   useEffect(() => {
@@ -174,17 +182,15 @@ export default function AdminPage() {
     setShowExperienceForm(true);
   };
 
-  const handleDeleteExperience = async (id: string) => {
-    if (confirm("Êtes-vous sûr de vouloir supprimer cette expérience ?")) {
-      try {
-        await fetch(`/api/experience/${id}`, { method: 'DELETE' });
-        await loadExperiences();
-        showToast('success', 'Experience deleted successfully');
-      } catch (error) {
-        console.error('Error deleting experience:', error);
-        showToast('error', 'Failed to delete experience');
-      }
-    }
+  const handleDeleteExperience = (id: string) => {
+    const experience = experiences.find(e => e.id === id);
+    setConfirmModal({
+      isOpen: true,
+      type: 'experience',
+      id,
+      title: 'Supprimer l\'expérience',
+      message: `Êtes-vous sûr de vouloir supprimer l'expérience "${experience?.company}" ? Cette action est irréversible.`
+    });
   };
 
   const handleSaveExperience = async (e: React.FormEvent) => {
@@ -239,16 +245,32 @@ export default function AdminPage() {
     }
   };
 
-  const handleDeleteProject = async (id: string) => {
-    if (confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) {
-      try {
+  const handleDeleteProject = (id: string) => {
+    const project = projects.find(p => p.id === id);
+    setConfirmModal({
+      isOpen: true,
+      type: 'project',
+      id,
+      title: 'Supprimer le projet',
+      message: `Êtes-vous sûr de vouloir supprimer le projet "${project?.title}" ? Cette action est irréversible.`
+    });
+  };
+
+  const handleConfirmDelete = async () => {
+    const { type, id } = confirmModal;
+    try {
+      if (type === 'project') {
         await fetch(`/api/projects/${id}`, { method: 'DELETE' });
         await loadProjects();
         showToast('success', 'Project deleted successfully');
-      } catch (error) {
-        console.error('Error deleting project:', error);
-        showToast('error', 'Failed to delete project');
+      } else if (type === 'experience') {
+        await fetch(`/api/experience/${id}`, { method: 'DELETE' });
+        await loadExperiences();
+        showToast('success', 'Experience deleted successfully');
       }
+    } catch (error) {
+      console.error('Error deleting:', error);
+      showToast('error', 'Failed to delete');
     }
   };
 
@@ -1377,6 +1399,17 @@ export default function AdminPage() {
           {currentSection === 'avatar' && renderAvatarSection()}
           {currentSection === 'projects' && renderProjectsSection()}
           {currentSection === 'experience' && renderExperienceSection()}
+
+          {/* Confirm Modal */}
+          <ConfirmModal
+            isOpen={confirmModal.isOpen}
+            onClose={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
+            onConfirm={handleConfirmDelete}
+            title={confirmModal.title}
+            message={confirmModal.message}
+            confirmText="Supprimer"
+            cancelText="Annuler"
+          />
 
           {/* Toast Container */}
           <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">

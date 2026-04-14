@@ -30,13 +30,5 @@
     "image": "images/projects/color-detector.png",
     "index": "04",
     "description": "Real-time color detection via camera"
-  },
-  {
-    "id": "1775932831286",
-    "title": "projet test 1 ",
-    "icon": "Smartphone",
-    "image": "images/projects/gestion-carriere.png",
-    "index": "5",
-    "description": "tsin tsin "
   }
 ]
